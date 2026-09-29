@@ -3,280 +3,391 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TaalNinja - De Educatieve Nederlandse Taalgame</title>
+    <title>TaalNinja 2.0 - Arcade Nederlandse Game</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Outfit', sans-serif;
-            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
+            transition: background 0.5s ease, color 0.5s ease;
             min-height: 100vh;
+            user-select: none;
         }
+
+        /* Thema CSS Variabelen & Modus Styling */
+        body.theme-sunny {
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0fdf4 50%, #fef3c7 100%);
+            color: #0f172a;
+        }
+        body.theme-sakura {
+            background: linear-gradient(135deg, #fce7f3 0%, #f3e8ff 50%, #fff1f2 100%);
+            color: #1e1b4b;
+        }
+        body.theme-dark {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
+            color: #f8fafc;
+        }
+        body.theme-cyber {
+            background: linear-gradient(135deg, #180b2b 0%, #032b30 100%);
+            color: #f8fafc;
+        }
+
         .glass-card {
-            background: rgba(255, 255, 255, 0.07);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        body.theme-sunny .glass-card, body.theme-sakura .glass-card {
+            background: rgba(255, 255, 255, 0.75);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
         }
-        .pulse-btn {
-            transition: all 0.2s ease-in-out;
+
+        body.theme-dark .glass-card, body.theme-cyber .glass-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.3);
         }
-        .pulse-btn:hover {
-            transform: translateY(-2px) scale(1.02);
-            box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.5);
+
+        .btn-hover {
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .pulse-btn:active {
-            transform: translateY(0) scale(0.98);
+        .btn-hover:hover {
+            transform: translateY(-3px) scale(1.02);
         }
+        .btn-hover:active {
+            transform: translateY(0) scale(0.97);
+        }
+
+        @keyframes pulse-shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
+        }
+        .shake {
+            animation: pulse-shake 0.4s ease-in-out;
+        }
+
         @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-8px); }
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(2deg); }
         }
         .floating {
-            animation: float 4s ease-in-out infinite;
+            animation: float 3.5s ease-in-out infinite;
         }
-        @keyframes pop {
-            0% { transform: scale(0.8); opacity: 0; }
+
+        @keyframes popIn {
+            0% { transform: scale(0.85); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
         }
         .pop-in {
-            animation: pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(156, 163, 175, 0.5);
+            border-radius: 9999px;
         }
     </style>
 </head>
-<text class="text-gray-100 flex flex-col justify-between min-h-screen selection:bg-indigo-500 selection:text-white">
+<body class="theme-sunny flex flex-col justify-between min-h-screen">
 
-    <!-- Navbar / Header -->
-    <header class="w-full max-w-5xl mx-auto px-4 py-6 flex justify-between items-center">
+    <!-- Header / Navigatie -->
+    <header class="w-full max-w-5xl mx-auto px-4 py-4 flex justify-between items-center z-20">
         <div class="flex items-center space-x-3 cursor-pointer" onclick="game.showHome()">
-            <div class="w-12 h-12 bg-gradient-to-tr from-indigo-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-lg text-white text-2xl font-black floating">
+            <div id="activeAvatarIcon" class="w-12 h-12 bg-gradient-to-tr from-amber-400 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg text-2xl font-black floating">
                 🥷
             </div>
             <div>
-                <h1 class="text-2xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-400 via-pink-400 to-amber-300 bg-clip-text text-transparent">
-                    TaalNinja
+                <h1 class="text-2xl font-black tracking-tight bg-gradient-to-r from-amber-500 via-pink-500 to-indigo-600 bg-clip-text text-transparent">
+                    TaalNinja <span class="text-xs px-2 py-0.5 rounded-full bg-amber-500 text-white font-extrabold uppercase">2.0 Arcade</span>
                 </h1>
-                <p class="text-xs text-indigo-200/70 font-medium">Word meester in de Nederlandse taal</p>
+                <p class="text-xs opacity-75 font-semibold">Word de ultieme Taalkrijger!</p>
             </div>
         </div>
 
-        <div class="flex items-center space-x-3">
-            <button id="soundToggle" onclick="game.toggleSound()" class="p-3 glass-card rounded-xl text-indigo-200 hover:text-white transition">
-                <i class="fas fa-volume-up text-lg" id="soundIcon"></i>
-            </button>
-            <div class="glass-card px-4 py-2 rounded-xl flex items-center space-x-2 text-amber-300 font-bold border-amber-500/30">
-                <i class="fas fa-trophy"></i>
-                <span id="highScoreText">Highscore: 0</span>
+        <!-- Rechter Navigatie (Munten, Highscore, Instellingen) -->
+        <div class="flex items-center space-x-2 sm:space-x-3">
+            <!-- Munten Saldo -->
+            <div class="glass-card px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl flex items-center space-x-2 font-black text-amber-500 border-amber-400/40">
+                <span class="text-lg">🪙</span>
+                <span id="coinCountDisplay" class="text-sm sm:text-base">0</span>
             </div>
+
+            <!-- Instellingen Knop -->
+            <button onclick="game.toggleSettingsModal(true)" class="glass-card p-2.5 sm:p-3 rounded-xl hover:scale-105 transition" title="Instellingen & Thema's">
+                <i class="fas fa-cog text-lg text-indigo-500"></i>
+            </button>
+
+            <!-- Ninja Shop Knop -->
+            <button onclick="game.showShop()" class="glass-card p-2.5 sm:p-3 rounded-xl hover:scale-105 transition relative" title="Ninja Winkel">
+                <i class="fas fa-store text-lg text-emerald-500"></i>
+                <span id="shopBadge" class="hidden absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-ping"></span>
+            </button>
         </div>
     </header>
 
-    <!-- Main Game Container -->
-    <main class="w-full max-w-4xl mx-auto px-4 my-auto py-4">
+    <!-- Hoofdinhoud Container -->
+    <main class="w-full max-w-4xl mx-auto px-4 my-auto py-2 z-10">
 
-        <!-- SCREEN 1: Home / Categorie Selectie -->
-        <section id="homeScreen" class="pop-in space-y-8">
-            <div class="text-center space-y-3">
-                <span class="px-4 py-1.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-xs font-semibold uppercase tracking-wider">
-                    Kies je uitdaging
-                </span>
-                <h2 class="text-3xl sm:text-5xl font-black text-white">Wat wil je vandaag oefenen?</h2>
-                <p class="text-gray-300 text-sm sm:text-base max-w-lg mx-auto">
-                    Kies een categorie, verdien punten, behoud je streak en ontgrendel unieke TaalNinja-achievements!
-                </p>
-            </div>
-
-            <!-- Categorieën Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <!-- SCREEN 1: HOOFDMENU -->
+        <section id="homeScreen" class="pop-in space-y-6">
+            
+            <!-- Welkomstbanner -->
+            <div class="glass-card p-6 sm:p-8 rounded-3xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="space-y-2 text-center md:text-left z-10">
+                    <span class="px-3 py-1 rounded-full bg-amber-500/20 text-amber-600 font-bold text-xs uppercase tracking-wider border border-amber-500/30">
+                        ⚡ Kies je spelmodus
+                    </span>
+                    <h2 class="text-3xl sm:text-4xl font-black">Klaar voor de strijd?</h2>
+                    <p class="text-sm opacity-80 max-w-md">Kies een spelmodus, verdien munten, ontgrendel nieuwe avatars en versla de Bosses!</p>
+                </div>
                 
-                <!-- Categorie 1 -->
-                <div onclick="game.startCategory('dt')" class="glass-card p-6 rounded-2xl border-indigo-500/30 hover:border-indigo-400/80 cursor-pointer pulse-btn group relative overflow-hidden">
-                    <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-indigo-500/10 rounded-full blur-xl group-hover:bg-indigo-500/30 transition"></div>
-                    <div class="flex items-start space-x-4">
-                        <div class="w-14 h-14 bg-indigo-500/20 text-indigo-300 rounded-xl flex items-center justify-center text-2xl font-black shrink-0 border border-indigo-500/30">
-                            ✍️
+                <div class="flex items-center space-x-3 z-10">
+                    <button onclick="game.startDailyChallenge()" class="px-5 py-3.5 bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 text-white font-extrabold rounded-2xl shadow-lg btn-hover flex items-center space-x-2">
+                        <span class="text-xl">📅</span>
+                        <span>Dagelijkse Challenge</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modus Selectie Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                
+                <!-- Arcade Modus (Tijd + Harten) -->
+                <div onclick="game.startMode('arcade')" class="glass-card p-6 rounded-2xl cursor-pointer btn-hover border-2 border-indigo-500/30 hover:border-indigo-500 flex flex-col justify-between relative group">
+                    <div class="flex items-start justify-between">
+                        <div class="w-12 h-12 rounded-xl bg-indigo-500/20 text-indigo-600 flex items-center justify-center text-2xl font-black">
+                            ⏱️
                         </div>
-                        <div>
-                            <h3 class="text-xl font-bold text-white group-hover:text-indigo-300 transition">d, t of dt?</h3>
-                            <p class="text-sm text-gray-300 mt-1">Oefen werkwoordspelling, persoonsvormen en voltooid deelwoorden met de 't Kofschip regel.</p>
-                            <span class="inline-flex items-center text-xs font-bold text-indigo-400 mt-3 group-hover:translate-x-1 transition-transform">
-                                Start categorie <i class="fas fa-arrow-right ml-2"></i>
-                            </span>
-                        </div>
+                        <span class="px-2.5 py-1 rounded-lg bg-indigo-500 text-white font-black text-xs">POPULAIR</span>
+                    </div>
+                    <div class="mt-4">
+                        <h3 class="text-xl font-black">Arcade Race</h3>
+                        <p class="text-xs opacity-75 mt-1">Race tegen de klok! Je hebt 3 levens en krijgt combo-bonussen bij snelle antwoorden.</p>
+                    </div>
+                    <div class="mt-4 flex items-center text-xs font-bold text-indigo-600">
+                        <span>Speel Nu</span>
+                        <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
                     </div>
                 </div>
 
-                <!-- Categorie 2 -->
-                <div onclick="game.startCategory('woordsoorten')" class="glass-card p-6 rounded-2xl border-pink-500/30 hover:border-pink-400/80 cursor-pointer pulse-btn group relative overflow-hidden">
-                    <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-pink-500/10 rounded-full blur-xl group-hover:bg-pink-500/30 transition"></div>
-                    <div class="flex items-start space-x-4">
-                        <div class="w-14 h-14 bg-pink-500/20 text-pink-300 rounded-xl flex items-center justify-center text-2xl font-black shrink-0 border border-pink-500/30">
-                            🔍
+                <!-- Boss Battle / Avontuur Modus -->
+                <div onclick="game.startMode('boss')" class="glass-card p-6 rounded-2xl cursor-pointer btn-hover border-2 border-rose-500/30 hover:border-rose-500 flex flex-col justify-between relative group">
+                    <div class="flex items-start justify-between">
+                        <div class="w-12 h-12 rounded-xl bg-rose-500/20 text-rose-600 flex items-center justify-center text-2xl font-black">
+                            🐉
                         </div>
-                        <div>
-                            <h3 class="text-xl font-bold text-white group-hover:text-pink-300 transition">Woordsoorten</h3>
-                            <p class="text-sm text-gray-300 mt-1">Herken zelfstandige naamwoorden, werkwoorden, voorzetsels, bijvoeglijke naamwoorden en meer.</p>
-                            <span class="inline-flex items-center text-xs font-bold text-pink-400 mt-3 group-hover:translate-x-1 transition-transform">
-                                Start categorie <i class="fas fa-arrow-right ml-2"></i>
-                            </span>
-                        </div>
+                        <span class="px-2.5 py-1 rounded-lg bg-rose-500 text-white font-black text-xs">BAASGEVECHT</span>
+                    </div>
+                    <div class="mt-4">
+                        <h3 class="text-xl font-black">Draken Avontuur</h3>
+                        <p class="text-xs opacity-75 mt-1">Versla de Grammatica Draak door vragen goed te beantwoorden voor extra veel munten!</p>
+                    </div>
+                    <div class="mt-4 flex items-center text-xs font-bold text-rose-600">
+                        <span>Start Avontuur</span>
+                        <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
                     </div>
                 </div>
 
-                <!-- Categorie 3 -->
-                <div onclick="game.startCategory('spreekwoorden')" class="glass-card p-6 rounded-2xl border-amber-500/30 hover:border-amber-400/80 cursor-pointer pulse-btn group relative overflow-hidden">
-                    <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-amber-500/10 rounded-full blur-xl group-hover:bg-amber-500/30 transition"></div>
-                    <div class="flex items-start space-x-4">
-                        <div class="w-14 h-14 bg-amber-500/20 text-amber-300 rounded-xl flex items-center justify-center text-2xl font-black shrink-0 border border-amber-500/30">
-                            📜
+                <!-- Klassiek Oefenen -->
+                <div onclick="game.startMode('practice')" class="glass-card p-6 rounded-2xl cursor-pointer btn-hover border-2 border-emerald-500/30 hover:border-emerald-500 flex flex-col justify-between relative group">
+                    <div class="flex items-start justify-between">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-500/20 text-emerald-600 flex items-center justify-center text-2xl font-black">
+                            📖
                         </div>
-                        <div>
-                            <h3 class="text-xl font-bold text-white group-hover:text-amber-300 transition">Spreekwoorden & Gezegden</h3>
-                            <p class="text-sm text-gray-300 mt-1">Vul de ontbrekende woorden aan en ontdek de echte betekenis van bekende spreekwoorden.</p>
-                            <span class="inline-flex items-center text-xs font-bold text-amber-400 mt-3 group-hover:translate-x-1 transition-transform">
-                                Start categorie <i class="fas fa-arrow-right ml-2"></i>
-                            </span>
-                        </div>
+                        <span class="px-2.5 py-1 rounded-lg bg-emerald-500 text-white font-black text-xs">GEEN TIJDSDRUK</span>
+                    </div>
+                    <div class="mt-4">
+                        <h3 class="text-xl font-black">Oefenmodus</h3>
+                        <p class="text-xs opacity-75 mt-1">Oefen op je eigen tempo met uitgebreide grammaticale uitleg bij elk antwoord.</p>
+                    </div>
+                    <div class="mt-4 flex items-center text-xs font-bold text-emerald-600">
+                        <span>Oefening Kiezen</span>
+                        <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
                     </div>
                 </div>
 
-                <!-- Categorie 4 -->
-                <div onclick="game.startCategory('woordenschat')" class="glass-card p-6 rounded-2xl border-emerald-500/30 hover:border-emerald-400/80 cursor-pointer pulse-btn group relative overflow-hidden">
-                    <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-emerald-500/10 rounded-full blur-xl group-hover:bg-emerald-500/30 transition"></div>
-                    <div class="flex items-start space-x-4">
-                        <div class="w-14 h-14 bg-emerald-500/20 text-emerald-300 rounded-xl flex items-center justify-center text-2xl font-black shrink-0 border border-emerald-500/30">
-                            📚
+                <!-- Woordenschat Duel -->
+                <div onclick="game.startMode('speed')" class="glass-card p-6 rounded-2xl cursor-pointer btn-hover border-2 border-amber-500/30 hover:border-amber-500 flex flex-col justify-between relative group">
+                    <div class="flex items-start justify-between">
+                        <div class="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-600 flex items-center justify-center text-2xl font-black">
+                            ⚡
                         </div>
-                        <div>
-                            <h3 class="text-xl font-bold text-white group-hover:text-emerald-300 transition">Woordenschat & Synoniemen</h3>
-                            <p class="text-sm text-gray-300 mt-1">Vergroot je vocabulaire. Zoek de juiste synoniemen en betekenissen bij moeilijke woorden.</p>
-                            <span class="inline-flex items-center text-xs font-bold text-emerald-400 mt-3 group-hover:translate-x-1 transition-transform">
-                                Start categorie <i class="fas fa-arrow-right ml-2"></i>
-                            </span>
-                        </div>
+                        <span class="px-2.5 py-1 rounded-lg bg-amber-500 text-white font-black text-xs">SNELHEID</span>
+                    </div>
+                    <div class="mt-4">
+                        <h3 class="text-xl font-black">Spreekwoorden Blitz</h3>
+                        <p class="text-xs opacity-75 mt-1">Test je kennis van Nederlandse spreekwoorden in hoog tempo.</p>
+                    </div>
+                    <div class="mt-4 flex items-center text-xs font-bold text-amber-600">
+                        <span>Start Blitz</span>
+                        <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
                     </div>
                 </div>
 
             </div>
 
-            <!-- Prestaties / Badges Section -->
-            <div class="glass-card p-6 rounded-2xl">
-                <h3 class="text-lg font-bold text-white mb-4 flex items-center">
-                    <i class="fas fa-award text-amber-400 mr-2"></i> Jouw Behaalde Badges
-                </h3>
-                <div id="badgesContainer" class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                    <!-- Badges worden dynamisch geladen -->
+            <!-- Statistieken Quick View -->
+            <div class="glass-card p-5 rounded-2xl flex justify-around items-center text-center">
+                <div>
+                    <div class="text-xs opacity-70 font-semibold">Totaal Munten</div>
+                    <div class="text-xl font-black text-amber-500" id="statCoins">0 🪙</div>
+                </div>
+                <div class="h-8 w-px bg-gray-400/30"></div>
+                <div>
+                    <div class="text-xs opacity-70 font-semibold">Hoogste Combo</div>
+                    <div class="text-xl font-black text-indigo-500" id="statMaxStreak">0 🔥</div>
+                </div>
+                <div class="h-8 w-px bg-gray-400/30"></div>
+                <div>
+                    <div class="text-xs opacity-70 font-semibold">Highscore</div>
+                    <div class="text-xl font-black text-emerald-500" id="statHighScore">0</div>
                 </div>
             </div>
         </section>
 
-        <!-- SCREEN 2: Gameplay -->
-        <section id="gameScreen" class="hidden space-y-6">
-            <!-- Progress Bar & Score Bar -->
-            <div class="glass-card p-4 rounded-2xl flex flex-col sm:flex-row justify-between items-center gap-4">
-                <div class="flex items-center space-x-4 w-full sm:w-auto">
-                    <button onclick="game.showHome()" class="text-gray-400 hover:text-white transition p-2">
-                        <i class="fas fa-arrow-left text-xl"></i>
-                    </button>
-                    <div>
-                        <span id="categoryBadge" class="text-xs font-bold uppercase tracking-wider text-indigo-400">Categorie</span>
-                        <div class="text-sm font-semibold text-white" id="questionProgress">Vraag 1 van 10</div>
-                    </div>
+        <!-- SCREEN 2: GAMEPLAY SCREEN -->
+        <section id="gameScreen" class="hidden space-y-4">
+            
+            <!-- Top Game HUD (Harten, Timer, Combo, Score) -->
+            <div class="glass-card p-4 rounded-2xl flex flex-wrap justify-between items-center gap-3">
+                <!-- Harten (Levens) -->
+                <div class="flex items-center space-x-1" id="heartsContainer">
+                    <span class="text-2xl animate-bounce">❤️</span>
+                    <span class="text-2xl animate-bounce">❤️</span>
+                    <span class="text-2xl animate-bounce">❤️</span>
                 </div>
 
-                <div class="w-full sm:w-1/3 bg-gray-700/50 rounded-full h-3 overflow-hidden border border-white/10">
-                    <div id="progressBar" class="bg-gradient-to-r from-indigo-500 to-pink-500 h-full w-0 transition-all duration-300"></div>
+                <!-- Combo Multiplier -->
+                <div class="flex items-center space-x-2">
+                    <span id="comboBadge" class="hidden px-3 py-1 rounded-full bg-gradient-to-r from-amber-500 to-red-500 text-white font-black text-xs tracking-wider animate-pulse">
+                        COMBO x2 🔥
+                    </span>
                 </div>
 
-                <div class="flex items-center space-x-6">
-                    <div class="text-center">
-                        <div class="text-xs text-gray-400 font-medium">Streak</div>
-                        <div class="text-lg font-black text-amber-400 flex items-center justify-center">
-                            🔥 <span id="streakCounter" class="ml-1">0</span>
-                        </div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-xs text-gray-400 font-medium">Punten</div>
-                        <div class="text-lg font-black text-indigo-300" id="scoreCounter">0</div>
-                    </div>
+                <!-- Timer Bar -->
+                <div id="timerContainer" class="w-full sm:w-1/3 bg-gray-300/40 rounded-full h-3.5 overflow-hidden border border-white/20 relative">
+                    <div id="timerBar" class="bg-gradient-to-r from-emerald-400 via-amber-400 to-rose-500 h-full w-full transition-all duration-100"></div>
+                </div>
+
+                <!-- Score Counter -->
+                <div class="text-right">
+                    <span class="text-xs opacity-70 font-bold block">SCORE</span>
+                    <span id="currentScore" class="text-2xl font-black text-indigo-600">0</span>
                 </div>
             </div>
 
-            <!-- Question Card -->
-            <div class="glass-card p-6 sm:p-10 rounded-3xl relative overflow-hidden text-center space-y-6">
-                <!-- Question Context / Prompt -->
-                <div class="space-y-2">
-                    <p id="questionContext" class="text-indigo-300 font-semibold text-sm uppercase tracking-wide">Vul het juiste woord in</p>
-                    <h2 id="questionText" class="text-2xl sm:text-4xl font-extrabold text-white leading-relaxed">
-                        ...
+            <!-- Boss HP Bar (Alleen actief tijdens Boss Battle) -->
+            <div id="bossHpContainer" class="hidden glass-card p-4 rounded-2xl space-y-2 border-2 border-rose-500/40">
+                <div class="flex justify-between items-center font-black text-sm">
+                    <span class="flex items-center text-rose-600">🐉 Grammatica Draak</span>
+                    <span id="bossHpText" class="text-xs text-rose-500">100 / 100 HP</span>
+                </div>
+                <div class="w-full bg-gray-300/40 rounded-full h-4 overflow-hidden">
+                    <div id="bossHpBar" class="bg-gradient-to-r from-rose-500 to-red-600 h-full w-full transition-all duration-300"></div>
+                </div>
+            </div>
+
+            <!-- Vraag Card -->
+            <div class="glass-card p-6 sm:p-10 rounded-3xl text-center space-y-6 relative overflow-hidden">
+                
+                <!-- Category Tag & Question -->
+                <div class="space-y-3">
+                    <span id="questionTag" class="px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-600 font-extrabold text-xs uppercase tracking-wider">
+                        Werkwoorden
+                    </span>
+                    <h2 id="questionText" class="text-2xl sm:text-3xl font-black leading-snug">
+                        Laden...
                     </h2>
                 </div>
 
-                <!-- Answer Options Grid -->
-                <div id="optionsContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
-                    <!-- Opties worden hier dynamisch ingevoegd -->
+                <!-- Opties Grid -->
+                <div id="optionsContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                    <!-- Knoppen dynamisch -->
                 </div>
 
-                <!-- Feedback & Explanation Modal/Box -->
+                <!-- Power-ups Bar -->
+                <div class="pt-4 border-t border-gray-300/30 flex justify-center items-center space-x-4">
+                    <span class="text-xs font-bold opacity-75">Power-ups:</span>
+                    <button id="puShield" onclick="game.usePowerUp('shield')" class="px-3 py-2 glass-card hover:bg-white rounded-xl text-xs font-bold flex items-center space-x-1.5 btn-hover">
+                        <span>🛡️ Schild</span>
+                        <span id="puShieldCount" class="px-1.5 py-0.5 rounded-md bg-indigo-500 text-white text-[10px]">0</span>
+                    </button>
+                    <button id="puFreeze" onclick="game.usePowerUp('freeze')" class="px-3 py-2 glass-card hover:bg-white rounded-xl text-xs font-bold flex items-center space-x-1.5 btn-hover">
+                        <span>❄️ Bevries</span>
+                        <span id="puFreezeCount" class="px-1.5 py-0.5 rounded-md bg-indigo-500 text-white text-[10px]">0</span>
+                    </button>
+                    <button id="puFifty" onclick="game.usePowerUp('fifty')" class="px-3 py-2 glass-card hover:bg-white rounded-xl text-xs font-bold flex items-center space-x-1.5 btn-hover">
+                        <span>⚡ 50/50</span>
+                        <span id="puFiftyCount" class="px-1.5 py-0.5 rounded-md bg-indigo-500 text-white text-[10px]">0</span>
+                    </button>
+                </div>
+
+                <!-- Feedback Popup -->
                 <div id="feedbackBox" class="hidden p-4 rounded-2xl text-left border transition-all duration-300 pop-in">
                     <div class="flex items-start space-x-3">
-                        <div id="feedbackIcon" class="text-2xl mt-0.5"></div>
+                        <div id="feedbackIcon" class="text-3xl"></div>
                         <div class="space-y-1">
-                            <h4 id="feedbackTitle" class="font-bold text-lg"></h4>
-                            <p id="feedbackExplanation" class="text-sm leading-relaxed opacity-90"></p>
+                            <h4 id="feedbackTitle" class="font-extrabold text-lg"></h4>
+                            <p id="feedbackText" class="text-sm opacity-90 leading-relaxed"></p>
                         </div>
                     </div>
-                    <button id="nextBtn" onclick="game.nextQuestion()" class="mt-4 w-full py-3 bg-white text-gray-900 hover:bg-gray-100 font-bold rounded-xl transition shadow-lg flex items-center justify-center space-x-2">
+                    <button id="nextBtn" onclick="game.nextQuestion()" class="mt-4 w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-xl shadow-lg transition flex items-center justify-center space-x-2">
                         <span>Volgende Vraag</span>
                         <i class="fas fa-arrow-right"></i>
                     </button>
                 </div>
+
             </div>
         </section>
 
-        <!-- SCREEN 3: Resultaten / Samenvatting -->
-        <section id="resultScreen" class="hidden pop-in space-y-8 text-center">
-            <div class="glass-card p-8 sm:p-12 rounded-3xl space-y-6 relative overflow-hidden">
-                <div class="w-24 h-24 mx-auto bg-gradient-to-tr from-amber-400 to-pink-500 rounded-3xl flex items-center justify-center text-5xl shadow-2xl floating">
-                    👑
+        <!-- SCREEN 3: RESULTATEN -->
+        <section id="resultScreen" class="hidden pop-in space-y-6 text-center">
+            <div class="glass-card p-8 sm:p-12 rounded-3xl space-y-6">
+                <div id="resultEmoji" class="text-6xl floating">👑</div>
+                
+                <div class="space-y-1">
+                    <h2 id="resultTitle" class="text-3xl sm:text-4xl font-black">Geweldig Gespeeld!</h2>
+                    <p id="resultSubtitle" class="text-sm opacity-80">Je hebt de ronde voltooid.</p>
                 </div>
 
-                <div class="space-y-2">
-                    <h2 class="text-3xl sm:text-5xl font-black text-white">Goed Gedaan!</h2>
-                    <p id="resultSubtitle" class="text-gray-300 text-base sm:text-lg">Je hebt de ronde voltooid.</p>
-                </div>
-
-                <!-- Score Stats Grid -->
-                <div class="grid grid-cols-3 gap-4 max-w-lg mx-auto py-4">
+                <!-- Statistieken Grid -->
+                <div class="grid grid-cols-3 gap-3 max-w-md mx-auto">
                     <div class="glass-card p-4 rounded-2xl">
-                        <div class="text-xs text-gray-400">Score</div>
-                        <div id="finalScore" class="text-2xl sm:text-3xl font-black text-indigo-300">0</div>
+                        <div class="text-xs opacity-70 font-semibold">Behaalde Score</div>
+                        <div id="resScore" class="text-2xl font-black text-indigo-600">0</div>
                     </div>
                     <div class="glass-card p-4 rounded-2xl">
-                        <div class="text-xs text-gray-400">Nauwkeurigheid</div>
-                        <div id="finalAccuracy" class="text-2xl sm:text-3xl font-black text-emerald-400">0%</div>
+                        <div class="text-xs opacity-70 font-semibold">Verdiende Munten</div>
+                        <div id="resCoins" class="text-2xl font-black text-amber-500">+0 🪙</div>
                     </div>
                     <div class="glass-card p-4 rounded-2xl">
-                        <div class="text-xs text-gray-400">Max Streak</div>
-                        <div id="finalStreak" class="text-2xl sm:text-3xl font-black text-amber-400">0</div>
+                        <div class="text-xs opacity-70 font-semibold">Max Combo</div>
+                        <div id="resCombo" class="text-2xl font-black text-rose-500">0 🔥</div>
                     </div>
                 </div>
 
-                <div id="unlockedBadgeNotice" class="hidden p-4 bg-amber-500/20 border border-amber-500/40 rounded-2xl text-amber-200 text-sm font-semibold flex items-center justify-center space-x-2">
-                    <span>🎉 Nieue badge ontgrendeld!</span>
-                </div>
-
-                <!-- Navigation Buttons -->
-                <div class="flex flex-col sm:flex-row justify-center gap-4 pt-4">
-                    <button onclick="game.restartCategory()" class="px-8 py-4 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-bold rounded-2xl transition shadow-xl pulse-btn flex items-center justify-center space-x-2">
+                <div class="flex flex-col sm:flex-row justify-center gap-3 pt-2">
+                    <button onclick="game.restartGame()" class="px-8 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-black rounded-2xl shadow-lg btn-hover flex items-center justify-center space-x-2">
                         <i class="fas fa-redo"></i>
                         <span>Opnieuw Spelen</span>
                     </button>
-                    <button onclick="game.showHome()" class="px-8 py-4 glass-card hover:bg-white/10 text-white font-bold rounded-2xl transition border border-white/20 flex items-center justify-center space-x-2">
+                    <button onclick="game.showHome()" class="px-8 py-3.5 glass-card hover:bg-white/20 font-black rounded-2xl btn-hover flex items-center justify-center space-x-2">
                         <i class="fas fa-home"></i>
                         <span>Hoofdmenu</span>
                     </button>
@@ -284,208 +395,239 @@
             </div>
         </section>
 
+        <!-- SCREEN 4: NINJA WINKEL (SHOP) -->
+        <section id="shopScreen" class="hidden pop-in space-y-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <button onclick="game.showHome()" class="p-2.5 glass-card rounded-xl hover:bg-white/20">
+                        <i class="fas fa-arrow-left text-lg"></i>
+                    </button>
+                    <h2 class="text-2xl sm:text-3xl font-black">Ninja Winkel 🛒</h2>
+                </div>
+                <div class="glass-card px-4 py-2 rounded-xl text-amber-500 font-black flex items-center space-x-2">
+                    <span>🪙</span>
+                    <span id="shopCoinDisplay">0</span>
+                </div>
+            </div>
+
+            <!-- Avatars Kopen/Kiezen -->
+            <div class="space-y-3">
+                <h3 class="text-lg font-black flex items-center">
+                    <span class="mr-2">🥷</span> Ninja Avatars
+                </h3>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4" id="avatarShopGrid">
+                    <!-- Dynamisch geladen avatars -->
+                </div>
+            </div>
+
+            <!-- Power-ups Kopen -->
+            <div class="space-y-3">
+                <h3 class="text-lg font-black flex items-center">
+                    <span class="mr-2">⚡</span> Power-ups Inslaan
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="glass-card p-4 rounded-2xl flex flex-col justify-between space-y-3">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-3xl">🛡️</span>
+                            <div>
+                                <h4 class="font-bold text-sm">Schild</h4>
+                                <p class="text-xs opacity-75">Beschermt tegen 1 foutief antwoord.</p>
+                            </div>
+                        </div>
+                        <button onclick="game.buyPowerUp('shield', 50)" class="w-full py-2 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl text-xs flex items-center justify-center space-x-1 btn-hover">
+                            <span>Koop voor 50</span>
+                            <span>🪙</span>
+                        </button>
+                    </div>
+
+                    <div class="glass-card p-4 rounded-2xl flex flex-col justify-between space-y-3">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-3xl">❄️</span>
+                            <div>
+                                <h4 class="font-bold text-sm">Tijdbevriezer</h4>
+                                <p class="text-xs opacity-75">Pauzeert de timer voor 5 seconden.</p>
+                            </div>
+                        </div>
+                        <button onclick="game.buyPowerUp('freeze', 40)" class="w-full py-2 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl text-xs flex items-center justify-center space-x-1 btn-hover">
+                            <span>Koop voor 40</span>
+                            <span>🪙</span>
+                        </button>
+                    </div>
+
+                    <div class="glass-card p-4 rounded-2xl flex flex-col justify-between space-y-3">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-3xl">⚡</span>
+                            <div>
+                                <h4 class="font-bold text-sm">50/50 Hulp</h4>
+                                <p class="text-xs opacity-75">Streep 2 foutieve opties weg.</p>
+                            </div>
+                        </div>
+                        <button onclick="game.buyPowerUp('fifty', 60)" class="w-full py-2 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl text-xs flex items-center justify-center space-x-1 btn-hover">
+                            <span>Koop voor 60</span>
+                            <span>🪙</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </main>
 
+    <!-- INSTELLINGEN MODAL (ACHTERGRONDEN & THEMA'S) -->
+    <div id="settingsModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-md z-50 flex items-center justify-center p-4">
+        <div class="glass-card bg-white/90 text-gray-900 max-w-md w-full p-6 rounded-3xl space-y-6 pop-in shadow-2xl">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 class="text-xl font-black flex items-center">
+                    <i class="fas fa-paint-brush text-indigo-600 mr-2"></i> Instellingen & Thema's
+                </h3>
+                <button onclick="game.toggleSettingsModal(false)" class="text-gray-400 hover:text-gray-700">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Thema Achtergrond Selectie -->
+            <div class="space-y-3">
+                <label class="text-xs font-bold uppercase text-gray-500 tracking-wider">Kies Spelthema / Achtergrond</label>
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="game.setTheme('theme-sunny')" class="p-3 rounded-2xl border-2 border-amber-400 bg-gradient-to-r from-sky-100 to-amber-100 text-slate-800 text-left font-bold text-xs flex items-center space-x-2 btn-hover">
+                        <span class="text-xl">☀️</span>
+                        <span>Zonnige Wei (Licht)</span>
+                    </button>
+                    <button onclick="game.setTheme('theme-sakura')" class="p-3 rounded-2xl border-2 border-pink-300 bg-gradient-to-r from-pink-100 to-rose-100 text-slate-800 text-left font-bold text-xs flex items-center space-x-2 btn-hover">
+                        <span class="text-xl">🌸</span>
+                        <span>Sakura (Licht & Fris)</span>
+                    </button>
+                    <button onclick="game.setTheme('theme-dark')" class="p-3 rounded-2xl border-2 border-indigo-900 bg-slate-900 text-white text-left font-bold text-xs flex items-center space-x-2 btn-hover">
+                        <span class="text-xl">🌙</span>
+                        <span>Nacht Ninja (Donker)</span>
+                    </button>
+                    <button onclick="game.setTheme('theme-cyber')" class="p-3 rounded-2xl border-2 border-cyan-500 bg-purple-950 text-cyan-300 text-left font-bold text-xs flex items-center space-x-2 btn-hover">
+                        <span class="text-xl">⚡</span>
+                        <span>Cyber Neon</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Geluid & Effecten -->
+            <div class="space-y-3 pt-2 border-t">
+                <label class="text-xs font-bold uppercase text-gray-500 tracking-wider">Geluid & Audio</label>
+                <div class="flex justify-between items-center p-3 bg-gray-100 rounded-2xl">
+                    <span class="text-sm font-semibold">Geluidseffecten</span>
+                    <button id="soundModalBtn" onclick="game.toggleSound()" class="px-4 py-1.5 bg-emerald-500 text-white rounded-xl font-bold text-xs">
+                        AAN
+                    </button>
+                </div>
+            </div>
+
+            <button onclick="game.toggleSettingsModal(false)" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-2xl transition">
+                Opslaan & Sluiten
+            </button>
+        </div>
+    </div>
+
     <!-- Footer -->
-    <footer class="w-full max-w-5xl mx-auto px-4 py-6 text-center text-xs text-indigo-200/50">
-        TaalNinja &copy; Educatief Leerplatform Nederlands | Ontwikkeld voor interactief leren
+    <footer class="w-full max-w-5xl mx-auto px-4 py-4 text-center text-xs opacity-60">
+        TaalNinja 2.0 &copy; Nederlands Educatief Arcade Spel
     </footer>
 
-    <!-- Game Logic JavaScript -->
     <script>
-        // Database van vragen ingedeeld per categorie
-        const questionDatabase = {
-            dt: [
-                {
-                    context: "Spelling van Werkwoorden (Tegenwoordige Tijd)",
-                    question: "Hij ...... (beloven) mij altijd eerlijk te zijn.",
-                    options: ["beloofd", "belooft", "beloofdt", "beloof"],
-                    correct: 1,
-                    explanation: "Tegenwoordige tijd, hij-vorm: stam (beloof) + t = belooft."
-                },
-                {
-                    context: "Spelling van Werkwoorden (Voltooid Deelwoord)",
-                    question: "De politie heeft de verdachte gisteren ......",
-                    options: ["verhoort", "verhoord", "verhoorde", "verhoordt"],
-                    correct: 1,
-                    explanation: "Voltooid deelwoord van verhoren: de stam is 'verhoor' (eindigt op r). De 'r' zit niet in 't Kofschip, dus we schrijven een 'd' op het einde: verhoord."
-                },
-                {
-                    context: "Spelling van Werkwoorden (Tegenwoordige Tijd)",
-                    question: "...... jij morgen ook mee naar de film?",
-                    options: ["Gaat", "Ga", "Gaadt", "Gaad"],
-                    correct: 1,
-                    explanation: "Wanneer 'jij' achter de persoonsvorm staat in de tegenwoordige tijd, vervalt de uitgang '-t'. Dus: 'Ga jij'."
-                },
-                {
-                    context: "Spelling van Werkwoorden (Verleden Tijd)",
-                    question: "Zij ...... (fietsen) gisteren door de regen naar huis.",
-                    options: ["fietste", "fietstte", "fietsde", "fietsten"],
-                    correct: 0,
-                    explanation: "Stam van fietsen is 'fiets'. De laatste letter 's' zit in 't Kofschip, dus de verleden tijd krijgt -te: fietste."
-                },
-                {
-                    context: "Spelling van Werkwoorden (Voltooid Deelwoord)",
-                    question: "Het feest is door de organisatie ......",
-                    options: ["gelast", "gelastd", "gelaste", "gelastt"],
-                    correct: 0,
-                    explanation: "Het voltooid deelwoord van afgelasten/gelasten is 'gelast' (stam eindigt op t)."
-                },
-                {
-                    context: "Spelling van Werkwoorden (Tegenwoordige Tijd)",
-                    question: "Wat ...... (gebeuren) er op dit moment?",
-                    options: ["gebeurd", "gebeurt", "gebeurde", "gebeurdt"],
-                    correct: 1,
-                    explanation: "Dit is tegenwoordige tijd (onderwerp is 'wat' -> 3e persoon enkelvoud). Dus: stam + t = gebeurt."
-                }
-            ],
-            woordsoorten: [
-                {
-                    context: "Bepaal de woordsoort van het vetgedrukte woord",
-                    question: "De **snelle** luipaard rende door de savanne.",
-                    options: ["Zelfstandig naamwoord", "Bijvoeglijk naamwoord", "Werkwoord", "Voorzetsel"],
-                    correct: 1,
-                    explanation: "'Snelle' zegt iets over het zelfstandig naamwoord 'luipaard', dus het is een bijvoeglijk naamwoord."
-                },
-                {
-                    context: "Bepaal de woordsoort van het vetgedrukte woord",
-                    question: "De sleutels liggen **op** de houten tafel.",
-                    options: ["Voorzetsel", "Lidwoord", "Bijwoord", "Voegwoord"],
-                    correct: 0,
-                    explanation: "'Op' is een voorzetsel (het geeft een plaats of verhouding aan, zoals 'in de kast' / 'op de kast')."
-                },
-                {
-                    context: "Bepaal de woordsoort van het vetgedrukte woord",
-                    question: "Morgen gaan **wij** samen naar de bibliotheek.",
-                    options: ["Aanwijzend voornaamwoord", "Persoonlijk voornaamwoord", "Bezittelijk voornaamwoord", "Zelfstandig naamwoord"],
-                    correct: 1,
-                    explanation: "'Wij' verwijst naar personen zonder hun naam te noemen: een persoonlijk voornaamwoord."
-                },
-                {
-                    context: "Bepaal de woordsoort van het vetgedrukte woord",
-                    question: "Dat is **mijn** nieuwe fiets.",
-                    options: ["Persoonlijk voornaamwoord", "Bezittelijk voornaamwoord", "Lidwoord", "Bijvoeglijk naamwoord"],
-                    correct: 1,
-                    explanation: "'Mijn' geeft een bezit aan van de fiets: dus een bezittelijk voornaamwoord."
-                },
-                {
-                    context: "Bepaal de woordsoort van het vetgedrukte woord",
-                    question: "Ik blijf thuis **omdat** het hevig regent.",
-                    options: ["Voorzetsel", "Voegwoord", "Bijwoord", "Werkwoord"],
-                    correct: 1,
-                    explanation: "'Omdat' verbindt twee zinnen met elkaar en geeft een reden aan: het is een voegwoord."
-                }
-            ],
-            spreekwoorden: [
-                {
-                    context: "Maak het spreekwoord compleet",
-                    question: "Nu komt de aap uit de ......",
-                    options: ["mouw", "doos", "mouwtjes", "kast"],
-                    correct: 0,
-                    explanation: "'De aap komt uit de mouw' betekent dat de werkelijke bedoeling of de waarheid plotseling duidelijk wordt."
-                },
-                {
-                    context: "Maak het spreekwoord compleet",
-                    question: "Iemand een hart onder de riem ......",
-                    options: ["binden", "steken", "leggen", "duwen"],
-                    correct: 1,
-                    explanation: "'Iemand een hart onder de riem steken' betekent iemand moed inspreken of ondersteunen."
-                },
-                {
-                    context: "Wat betekent dit spreekwoord?",
-                    question: "Wat betekent: 'Met de deur in huis vallen'?",
-                    options: [
-                        "Per ongeluk iets kapot maken",
-                        "Direct ter zake komen zonder inleiding",
-                        "Te laat op een afspraak komen",
-                        "Heel hard op de deur kloppen"
-                    ],
-                    correct: 1,
-                    explanation: "'Met de deur in huis vallen' wil zeggen dat je meteen zegt waar het om gaat, zonder omwegen."
-                },
-                {
-                    context: "Maak het spreekwoord compleet",
-                    question: "Als de kat van huis is, ...... de muizen op tafel.",
-                    options: ["dansen", "springen", "lopen", "feesten"],
-                    correct: 0,
-                    explanation: "'Als de kat van huis is, dansen de muizen op tafel' betekent dat onbeheerders/ondergeschikten hun gang gaan als het toezicht ontbreekt."
-                }
-            ],
-            woordenschat: [
-                {
-                    context: "Synoniemen & Betekenis",
-                    question: "Wat is het juiste synoniem voor het woord **'continu'**?",
-                    options: ["Onderbroken", "Voortdurend", "Zelden", "Snel"],
-                    correct: 1,
-                    explanation: "'Continu' betekent ononderbroken of voortdurend."
-                },
-                {
-                    context: "Synoniemen & Betekenis",
-                    question: "Wat betekent het woord **'lucratief'**?",
-                    options: ["Gevaarlijk en meedogenloos", "Winstgevend of voordelig", "Ingewikkeld en lastig", "Saai en eentonig"],
-                    correct: 1,
-                    explanation: "Een lucratieve bezigheid brengt veel geld/winst op."
-                },
-                {
-                    context: "Synoniemen & Betekenis",
-                    question: "Wat is het tegenovergestelde (antoniem) van **'optimistisch'**?",
-                    options: ["Positief", "Pessimistisch", "Realistisch", "Enthousiast"],
-                    correct: 1,
-                    explanation: "Optimistisch betekent positief ingesteld; het tegenovergestelde is pessimistisch (negatief ingesteld)."
-                },
-                {
-                    context: "Synoniemen & Betekenis",
-                    question: "Wat betekent **'ambivalent'**?",
-                    options: [
-                        "Tegenstrijdige gevoelens hebbend",
-                        "Heel erg vastberaden zijn",
-                        "Snel afgeleid raken",
-                        "Zeer deskundig op een gebied"
-                    ],
-                    correct: 0,
-                    explanation: "Als je ambivalent bent, voel je twee verschillende, tegenstrijdige dingen tegelijkertijd (twijfel)."
-                }
-            ]
-        };
+        const gameQuestions = [
+            // Werkwoorden d/t/dt
+            { cat: 'dt', tag: 'Spelling (d/t/dt)', q: 'Hij ...... (beloven) mij altijd te helpen.', options: ['beloofd', 'belooft', 'beloofdt', 'beloof'], correct: 1, exp: 'Tegenwoordige tijd hij-vorm = stam + t.' },
+            { cat: 'dt', tag: 'Spelling (Voltooid Deelwoord)', q: 'De rechercheur heeft de zaak ...... (onderzoeken).', options: ['onderzoekt', 'onderzocht', 'onderzoekte', 'onderzochtd'], correct: 1, exp: 'Onregelmatig werkwoord: onderzoeken -> onderzocht.' },
+            { cat: 'dt', tag: 'Spelling (Tegenwoordige Tijd)', q: '...... jij morgen ook mee naar het park?', options: ['Gaat', 'Ga', 'Gaadt', 'Gaad'], correct: 1, exp: 'Als "jij" achter het werkwoord staat, vervalt de -t.' },
+            { cat: 'dt', tag: 'Spelling (Verleden Tijd)', q: 'Zij ...... (fietsen) gisteren door de storm.', options: ['fietste', 'fietstte', 'fietsde', 'fietsten'], correct: 0, exp: 'Stam is fiets (s zit in \'t Kofschip) -> verleden tijd +te.' },
 
-        // Badges Definities
-        const badgesData = [
-            { id: 'first_win', title: 'Eerste Stap', icon: '🌱', desc: 'Voltooi je eerste categorie' },
-            { id: 'streak_5', title: 'Scherp van Geest', icon: '⚡', desc: 'Behaal een streak van 5' },
-            { id: 'perfect_score', title: 'TaalMeester', icon: '👑', desc: 'Behaal 100% op een categorie' },
-            { id: 'high_score', title: 'Top Scorer', icon: '🔥', desc: 'Haal meer dan 500 punten' }
+            // Woordsoorten
+            { cat: 'woordsoorten', tag: 'Woordsoorten', q: 'Wat voor woordsoort is **snelle** in: "De snelle auto"?', options: ['Zelfstandig naamwoord', 'Bijvoeglijk naamwoord', 'Werkwoord', 'Voorzetsel'], correct: 1, exp: '"Snelle" zegt iets over het zelfstandig naamwoord auto.' },
+            { cat: 'woordsoorten', tag: 'Woordsoorten', q: 'Wat voor woordsoort is **onder** in: "Het boek ligt onder de tafel"?', options: ['Voorzetsel', 'Lidwoord', 'Voegwoord', 'Bijwoord'], correct: 0, exp: '"Onder" geeft een plaats/verhouding aan (voorzetsel).' },
+            { cat: 'woordsoorten', tag: 'Woordsoorten', q: 'Wat voor woordsoort is **wij** in: "Morgen gaan wij weg"?', options: ['Aanwijzend voornaamwoord', 'Persoonlijk voornaamwoord', 'Bezittelijk voornaamwoord', 'Werkwoord'], correct: 1, exp: '"Wij" verwijst naar personen (persoonlijk voornaamwoord).' },
+
+            // Spreekwoorden
+            { cat: 'spreekwoorden', tag: 'Spreekwoorden', q: 'Nu komt de aap uit de ......', options: ['mouw', 'doos', 'kast', 'zak'], correct: 0, exp: 'Aap uit de mouw komen = de echte bedoeling wordt duidelijk.' },
+            { cat: 'spreekwoorden', tag: 'Spreekwoorden', q: 'Wat betekent: "Met de deur in huis vallen"?', options: ['Iets kapot maken', 'Direct ter zake komen', 'Te laat komen', 'Hard op de deur kloppen'], correct: 1, exp: 'Meteen vertellen waar het om gaat zonder inleiding.' },
+            { cat: 'spreekwoorden', tag: 'Spreekwoorden', q: 'Als de kat van huis is, ...... de muizen op tafel.', options: ['dansen', 'springen', 'lopen', 'feesten'], correct: 0, exp: 'Zonder toezicht doen ondergeschikten hun eigen zin.' },
+
+            // Woordenschat
+            { cat: 'woordenschat', tag: 'Woordenschat', q: 'Wat is het synoniem van **continu**?', options: ['Snel', 'Voortdurend', 'Zelden', 'Onderbroken'], correct: 1, exp: 'Continu betekent dat het ononderbroken doorgaat.' },
+            { cat: 'woordenschat', tag: 'Woordenschat', q: 'Wat betekent **lucratief**?', options: ['Gevaarlijk', 'Winstgevend', 'Moeilijk', 'Saai'], correct: 1, exp: 'Lucratief betekent dat het veel voordeel of geld oplevert.' }
         ];
 
-        // Game Engine Klasse
-        class TaalGame {
+        const avatarCatalog = [
+            { id: 'ninja_default', name: 'Ninja', icon: '🥷', price: 0, unlocked: true },
+            { id: 'ninja_sakura', name: 'Sakura Ninja', icon: '🌸', price: 100, unlocked: false },
+            { id: 'ninja_lightning', name: 'Bliksem Ninja', icon: '⚡', price: 200, unlocked: false },
+            { id: 'ninja_gold', name: 'Gouden Master', icon: '👑', price: 500, unlocked: false }
+        ];
+
+        class TaalNinjaGame {
             constructor() {
-                this.currentCategory = null;
-                this.questions = [];
-                this.currentIndex = 0;
-                this.score = 0;
-                this.streak = 0;
-                this.maxStreak = 0;
-                this.correctAnswersCount = 0;
-                this.soundEnabled = true;
-                this.highScore = parseInt(localStorage.getItem('taalninja_highscore')) || 0;
-                this.unlockedBadges = JSON.parse(localStorage.getItem('taalninja_badges')) || [];
+                this.coins = parseInt(localStorage.getItem('tn_coins')) || 50; // Starter munten
+                this.highScore = parseInt(localStorage.getItem('tn_highscore')) || 0;
+                this.maxStreak = parseInt(localStorage.getItem('tn_maxstreak')) || 0;
+                this.currentTheme = localStorage.getItem('tn_theme') || 'theme-sunny';
+                this.activeAvatar = localStorage.getItem('tn_avatar') || '🥷';
+                this.unlockedAvatars = JSON.parse(localStorage.getItem('tn_unlocked_avatars')) || ['ninja_default'];
                 
-                // Web Audio API voor geluidseffecten
+                // Inventory powerups
+                this.powerUps = JSON.parse(localStorage.getItem('tn_powerups')) || {
+                    shield: 1,
+                    freeze: 1,
+                    fifty: 1
+                };
+
+                this.soundEnabled = true;
                 this.audioCtx = null;
 
-                this.initUI();
+                // Game State
+                this.mode = 'arcade';
+                this.questions = [];
+                this.qIndex = 0;
+                this.score = 0;
+                this.streak = 0;
+                this.hearts = 3;
+                this.activeShield = false;
+                
+                // Boss State
+                this.bossHp = 100;
+
+                // Timer state
+                this.timerInterval = null;
+                this.timeLeft = 100; // Percentage
+                this.isFrozen = false;
+
+                this.initEngine();
             }
 
-            initAudio() {
-                if (!this.audioCtx) {
-                    this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                }
+            initEngine() {
+                this.setTheme(this.currentTheme);
+                this.updateGlobalHUD();
+                this.renderShop();
             }
 
-            playBeep(freq, type, duration) {
+            setTheme(themeName) {
+                document.body.className = `${themeName} flex flex-col justify-between min-h-screen`;
+                this.currentTheme = themeName;
+                localStorage.setItem('tn_theme', themeName);
+            }
+
+            toggleSettingsModal(show) {
+                const modal = document.getElementById('settingsModal');
+                if (show) modal.classList.remove('hidden');
+                else modal.classList.add('hidden');
+            }
+
+            toggleSound() {
+                this.soundEnabled = !this.soundEnabled;
+                const btn = document.getElementById('soundModalBtn');
+                btn.innerText = this.soundEnabled ? 'AAN' : 'UIT';
+                btn.className = this.soundEnabled ? 'px-4 py-1.5 bg-emerald-500 text-white rounded-xl font-bold text-xs' : 'px-4 py-1.5 bg-gray-400 text-white rounded-xl font-bold text-xs';
+            }
+
+            playSfx(freq, duration = 0.15, type = 'sine') {
                 if (!this.soundEnabled) return;
                 try {
-                    this.initAudio();
+                    if (!this.audioCtx) this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                     const osc = this.audioCtx.createOscillator();
                     const gain = this.audioCtx.createGain();
                     osc.type = type;
@@ -496,240 +638,362 @@
                     gain.connect(this.audioCtx.destination);
                     osc.start();
                     osc.stop(this.audioCtx.currentTime + duration);
-                } catch (e) {
-                    // Audio fallback / silence
-                }
+                } catch(e){}
             }
 
-            playCorrectSound() {
-                this.playBeep(523.25, 'sine', 0.15); // C5
-                setTimeout(() => this.playBeep(659.25, 'sine', 0.25), 100); // E5
-            }
+            updateGlobalHUD() {
+                document.getElementById('coinCountDisplay').innerText = this.coins;
+                document.getElementById('shopCoinDisplay').innerText = this.coins;
+                document.getElementById('statCoins').innerText = `${this.coins} 🪙`;
+                document.getElementById('statHighScore').innerText = this.highScore;
+                document.getElementById('statMaxStreak').innerText = `${this.maxStreak} 🔥`;
+                document.getElementById('activeAvatarIcon').innerText = this.activeAvatar;
 
-            playWrongSound() {
-                this.playBeep(220, 'sawtooth', 0.25); // A3
-            }
-
-            toggleSound() {
-                this.soundEnabled = !this.soundEnabled;
-                const icon = document.getElementById('soundIcon');
-                if (this.soundEnabled) {
-                    icon.className = 'fas fa-volume-up text-lg';
-                } else {
-                    icon.className = 'fas fa-volume-mute text-lg text-gray-500';
-                }
-            }
-
-            initUI() {
-                document.getElementById('highScoreText').innerText = `Highscore: ${this.highScore}`;
-                this.renderBadges();
-            }
-
-            renderBadges() {
-                const container = document.getElementById('badgesContainer');
-                container.innerHTML = badgesData.map(badge => {
-                    const isUnlocked = this.unlockedBadges.includes(badge.id);
-                    return `
-                        <div class="p-3 rounded-xl flex items-center space-x-3 ${isUnlocked ? 'bg-indigo-500/20 border border-indigo-500/40 text-white' : 'bg-white/5 opacity-40 border border-white/5'}">
-                            <span class="text-2xl">${badge.icon}</span>
-                            <div class="text-left">
-                                <div class="text-xs font-bold">${badge.title}</div>
-                                <div class="text-[10px] text-gray-300">${badge.desc}</div>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-            }
-
-            unlockBadge(badgeId) {
-                if (!this.unlockedBadges.includes(badgeId)) {
-                    this.unlockedBadges.push(badgeId);
-                    localStorage.setItem('taalninja_badges', JSON.stringify(this.unlockedBadges));
-                    this.renderBadges();
-                    document.getElementById('unlockedBadgeNotice').classList.remove('hidden');
-                }
+                // Powerup tellers
+                document.getElementById('puShieldCount').innerText = this.powerUps.shield;
+                document.getElementById('puFreezeCount').innerText = this.powerUps.freeze;
+                document.getElementById('puFiftyCount').innerText = this.powerUps.fifty;
             }
 
             showHome() {
+                this.stopTimer();
                 document.getElementById('homeScreen').classList.remove('hidden');
                 document.getElementById('gameScreen').classList.add('hidden');
                 document.getElementById('resultScreen').classList.add('hidden');
+                document.getElementById('shopScreen').classList.add('hidden');
             }
 
-            startCategory(catKey) {
-                this.currentCategory = catKey;
-                // Kopieer en schud de vragen
-                this.questions = [...questionDatabase[catKey]].sort(() => Math.random() - 0.5);
-                this.currentIndex = 0;
+            showShop() {
+                this.stopTimer();
+                document.getElementById('homeScreen').classList.add('hidden');
+                document.getElementById('gameScreen').classList.add('hidden');
+                document.getElementById('resultScreen').classList.add('hidden');
+                document.getElementById('shopScreen').classList.remove('hidden');
+                this.renderShop();
+            }
+
+            startDailyChallenge() {
+                this.startMode('daily');
+            }
+
+            startMode(modeType) {
+                this.mode = modeType;
+                this.questions = [...gameQuestions].sort(() => Math.random() - 0.5);
+                this.qIndex = 0;
                 this.score = 0;
                 this.streak = 0;
-                this.maxStreak = 0;
-                this.correctAnswersCount = 0;
-
-                const categoryTitles = {
-                    dt: 'd, t of dt?',
-                    woordsoorten: 'Woordsoorten',
-                    spreekwoorden: 'Spreekwoorden',
-                    woordenschat: 'Woordenschat'
-                };
-                document.getElementById('categoryBadge').innerText = categoryTitles[catKey] || catKey;
+                this.hearts = (modeType === 'practice') ? 999 : 3;
+                this.bossHp = 100;
+                this.activeShield = false;
 
                 document.getElementById('homeScreen').classList.add('hidden');
                 document.getElementById('resultScreen').classList.add('hidden');
                 document.getElementById('gameScreen').classList.remove('hidden');
 
-                this.updateStatsUI();
+                const bossContainer = document.getElementById('bossHpContainer');
+                if (modeType === 'boss') {
+                    bossContainer.classList.remove('hidden');
+                    this.updateBossBar();
+                } else {
+                    bossContainer.classList.add('hidden');
+                }
+
+                this.renderHearts();
                 this.loadQuestion();
             }
 
-            restartCategory() {
-                if (this.currentCategory) {
-                    this.startCategory(this.currentCategory);
-                } else {
-                    this.showHome();
+            renderHearts() {
+                const container = document.getElementById('heartsContainer');
+                if (this.mode === 'practice') {
+                    container.innerHTML = '<span class="text-sm font-black text-emerald-600">♾️ Oefenmodus</span>';
+                    return;
                 }
-            }
-
-            updateStatsUI() {
-                document.getElementById('scoreCounter').innerText = this.score;
-                document.getElementById('streakCounter').innerText = this.streak;
-                document.getElementById('questionProgress').innerText = `Vraag ${this.currentIndex + 1} van ${this.questions.length}`;
-                
-                const progressPct = ((this.currentIndex) / this.questions.length) * 100;
-                document.getElementById('progressBar').style.width = `${progressPct}%`;
+                let html = '';
+                for (let i = 0; i < 3; i++) {
+                    if (i < this.hearts) html += '<span class="text-2xl animate-bounce">❤️</span>';
+                    else html += '<span class="text-2xl opacity-30">🖤</span>';
+                }
+                container.innerHTML = html;
             }
 
             loadQuestion() {
-                const q = this.questions[this.currentIndex];
-                document.getElementById('questionContext').innerText = q.context;
-                document.getElementById('questionText').innerHTML = q.question.replace(/\*\*(.*?)\*\*/g, '<span class="text-amber-300 font-bold underline">$1</span>');
+                if (this.qIndex >= this.questions.length || this.hearts <= 0 || (this.mode === 'boss' && this.bossHp <= 0)) {
+                    this.finishGame();
+                    return;
+                }
 
-                // Verberg feedback box
-                const feedbackBox = document.getElementById('feedbackBox');
-                feedbackBox.classList.add('hidden');
+                const q = this.questions[this.qIndex];
+                document.getElementById('questionTag').innerText = q.tag;
+                document.getElementById('questionText').innerHTML = q.q.replace(/\*\*(.*?)\*\*/g, '<span class="text-amber-500 font-extrabold underline">$1</span>');
 
-                // Genereer Opties
+                // Reset feedback
+                document.getElementById('feedbackBox').classList.add('hidden');
+
+                // Render Opties
                 const container = document.getElementById('optionsContainer');
                 container.innerHTML = '';
                 
                 q.options.forEach((opt, idx) => {
                     const btn = document.createElement('button');
-                    btn.className = 'p-4 rounded-2xl glass-card text-white font-semibold hover:bg-white/15 transition border border-white/10 text-left flex items-center justify-between group pulse-btn';
+                    btn.className = 'p-4 rounded-2xl glass-card font-extrabold hover:bg-white/40 transition text-left flex items-center justify-between group btn-hover';
                     btn.innerHTML = `
                         <span>${opt}</span>
-                        <span class="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center text-xs text-gray-300 group-hover:bg-indigo-500 group-hover:text-white transition">
-                            ${String.fromCharCode(65 + idx)}
-                        </span>
+                        <span class="w-7 h-7 rounded-full bg-gray-300/40 flex items-center justify-center text-xs font-bold">${String.fromCharCode(65 + idx)}</span>
                     `;
-                    btn.onclick = () => this.checkAnswer(idx, btn);
+                    btn.onclick = () => this.answerQuestion(idx, btn);
                     container.appendChild(btn);
                 });
 
-                this.updateStatsUI();
+                document.getElementById('currentScore').innerText = this.score;
+
+                // Start timer
+                this.startTimer();
             }
 
-            checkAnswer(selectedIndex, selectedBtn) {
-                const q = this.questions[this.currentIndex];
-                const buttons = document.getElementById('optionsContainer').children;
-                
-                // Deactiveer alle optieknoppen
-                for (let b of buttons) {
-                    b.disabled = true;
-                    b.classList.remove('pulse-btn');
+            startTimer() {
+                this.stopTimer();
+                if (this.mode === 'practice') {
+                    document.getElementById('timerBar').style.width = '100%';
+                    return;
                 }
 
-                const feedbackBox = document.getElementById('feedbackBox');
-                const feedbackIcon = document.getElementById('feedbackIcon');
-                const feedbackTitle = document.getElementById('feedbackTitle');
-                const feedbackExplanation = document.getElementById('feedbackExplanation');
+                this.timeLeft = 100;
+                this.isFrozen = false;
+                const timerBar = document.getElementById('timerBar');
 
-                if (selectedIndex === q.correct) {
-                    // Goed antwoord
-                    this.playCorrectSound();
-                    selectedBtn.className = 'p-4 rounded-2xl bg-emerald-500/30 border-2 border-emerald-400 text-white font-semibold text-left flex items-center justify-between';
+                this.timerInterval = setInterval(() => {
+                    if (this.isFrozen) return;
+                    this.timeLeft -= 2.5; // Ca. 8-10 seconden per vraag
+                    timerBar.style.width = `${Math.max(0, this.timeLeft)}%`;
+
+                    if (this.timeLeft <= 0) {
+                        this.stopTimer();
+                        this.handleTimeout();
+                    }
+                }, 200);
+            }
+
+            stopTimer() {
+                if (this.timerInterval) clearInterval(this.timerInterval);
+            }
+
+            handleTimeout() {
+                this.playSfx(150, 0.3, 'sawtooth');
+                this.streak = 0;
+                this.updateComboUI();
+                
+                if (!this.activeShield) {
+                    this.hearts--;
+                    this.renderHearts();
+                } else {
+                    this.activeShield = false;
+                }
+
+                this.showFeedback(false, 'Tijd is om! Probeer sneller te reageren.');
+            }
+
+            usePowerUp(type) {
+                if (this.powerUps[type] <= 0) return;
+
+                if (type === 'shield' && !this.activeShield) {
+                    this.activeShield = true;
+                    this.powerUps.shield--;
+                    this.playSfx(600, 0.2);
+                    alert('🛡️ Schild geactiveerd! Je bent beschermt tegen je volgende fout.');
+                } else if (type === 'freeze' && !this.isFrozen) {
+                    this.isFrozen = true;
+                    this.powerUps.freeze--;
+                    this.playSfx(800, 0.3);
+                    setTimeout(() => { this.isFrozen = false; }, 5000);
+                } else if (type === 'fifty') {
+                    this.powerUps.fifty--;
+                    this.playSfx(700, 0.2);
+                    const q = this.questions[this.qIndex];
+                    const buttons = document.getElementById('optionsContainer').children;
+                    let removed = 0;
+                    for (let i = 0; i < buttons.length; i++) {
+                        if (i !== q.correct && removed < 2) {
+                            buttons[i].style.opacity = '0.2';
+                            buttons[i].disabled = true;
+                            removed++;
+                        }
+                    }
+                }
+
+                this.updateGlobalHUD();
+                localStorage.setItem('tn_powerups', JSON.stringify(this.powerUps));
+            }
+
+            answerQuestion(selectedIdx, btnElement) {
+                this.stopTimer();
+                const q = this.questions[this.qIndex];
+                const isCorrect = (selectedIdx === q.correct);
+
+                const buttons = document.getElementById('optionsContainer').children;
+                for (let b of buttons) b.disabled = true;
+
+                if (isCorrect) {
+                    this.playSfx(523, 0.15); // Win geluid
+                    setTimeout(() => this.playSfx(659, 0.25), 100);
                     
+                    btnElement.classList.add('bg-emerald-500', 'text-white');
                     this.streak++;
-                    if (this.streak > this.maxStreak) this.maxStreak = this.streak;
-                    this.score += 100 + (this.streak * 10);
-                    this.correctAnswersCount++;
-
-                    if (this.streak >= 5) {
-                        this.unlockBadge('streak_5');
+                    if (this.streak > this.maxStreak) {
+                        this.maxStreak = this.streak;
+                        localStorage.setItem('tn_maxstreak', this.maxStreak);
                     }
 
-                    feedbackBox.className = 'p-5 rounded-2xl text-left border transition-all duration-300 pop-in bg-emerald-500/20 border-emerald-500/40 text-emerald-200';
-                    feedbackIcon.innerHTML = '✅';
-                    feedbackTitle.innerText = 'Uitstekend!';
+                    const multiplier = Math.min(5, 1 + Math.floor(this.streak / 2));
+                    const earnedScore = 100 * multiplier;
+                    this.score += earnedScore;
+
+                    // Boss schaden
+                    if (this.mode === 'boss') {
+                        this.bossHp = Math.max(0, this.bossHp - 25);
+                        this.updateBossBar();
+                    }
+
+                    this.showFeedback(true, q.exp);
                 } else {
-                    // Fout antwoord
-                    this.playWrongSound();
-                    selectedBtn.className = 'p-4 rounded-2xl bg-rose-500/30 border-2 border-rose-400 text-white font-semibold text-left flex items-center justify-between';
+                    this.playSfx(200, 0.3, 'sawtooth');
                     
-                    // Markeer het juiste antwoord
-                    buttons[q.correct].className = 'p-4 rounded-2xl bg-emerald-500/30 border-2 border-emerald-400 text-white font-semibold text-left flex items-center justify-between';
-
-                    this.streak = 0;
-
-                    feedbackBox.className = 'p-5 rounded-2xl text-left border transition-all duration-300 pop-in bg-rose-500/20 border-rose-500/40 text-rose-200';
-                    feedbackIcon.innerHTML = '💡';
-                    feedbackTitle.innerText = 'Bijna goed!';
+                    if (this.activeShield) {
+                        this.activeShield = false;
+                        this.showFeedback(false, `🛡️ Schild heeft je gered! Uitleg: ${q.exp}`);
+                    } else {
+                        btnElement.classList.add('bg-rose-500', 'text-white');
+                        buttons[q.correct].classList.add('bg-emerald-500', 'text-white');
+                        this.streak = 0;
+                        this.hearts--;
+                        this.renderHearts();
+                        this.showFeedback(false, q.exp);
+                    }
                 }
 
-                feedbackExplanation.innerText = q.explanation;
-                feedbackBox.classList.remove('hidden');
+                this.updateComboUI();
+                document.getElementById('currentScore').innerText = this.score;
+            }
 
-                document.getElementById('scoreCounter').innerText = this.score;
-                document.getElementById('streakCounter').innerText = this.streak;
+            updateBossBar() {
+                document.getElementById('bossHpBar').style.width = `${this.bossHp}%`;
+                document.getElementById('bossHpText').innerText = `${this.bossHp} / 100 HP`;
+            }
+
+            updateComboUI() {
+                const badge = document.getElementById('comboBadge');
+                if (this.streak >= 2) {
+                    const mult = Math.min(5, 1 + Math.floor(this.streak / 2));
+                    badge.innerText = `COMBO x${mult} 🔥`;
+                    badge.classList.remove('hidden');
+                } else {
+                    badge.classList.add('hidden');
+                }
+            }
+
+            showFeedback(isCorrect, explanation) {
+                const box = document.getElementById('feedbackBox');
+                const icon = document.getElementById('feedbackIcon');
+                const title = document.getElementById('feedbackTitle');
+                const text = document.getElementById('feedbackText');
+
+                box.className = `p-4 rounded-2xl text-left border transition-all duration-300 pop-in mt-4 ${isCorrect ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-800' : 'bg-rose-500/20 border-rose-500/40 text-rose-800'}`;
+                icon.innerText = isCorrect ? '✅' : '💡';
+                title.innerText = isCorrect ? 'Goed gedaan!' : 'Helaas!';
+                text.innerText = explanation;
+
+                box.classList.remove('hidden');
             }
 
             nextQuestion() {
-                this.currentIndex++;
-                if (this.currentIndex < this.questions.length) {
-                    this.loadQuestion();
-                } else {
-                    this.finishGame();
-                }
+                this.qIndex++;
+                this.loadQuestion();
             }
 
             finishGame() {
+                this.stopTimer();
                 document.getElementById('gameScreen').classList.add('hidden');
                 document.getElementById('resultScreen').classList.remove('hidden');
-                document.getElementById('unlockedBadgeNotice').classList.add('hidden');
 
-                const accuracy = Math.round((this.correctAnswersCount / this.questions.length) * 100);
+                // Munten berekenen
+                const earnedCoins = Math.floor(this.score / 10) + (this.mode === 'boss' && this.bossHp <= 0 ? 50 : 0);
+                this.coins += earnedCoins;
+                localStorage.setItem('tn_coins', this.coins);
 
-                document.getElementById('finalScore').innerText = this.score;
-                document.getElementById('finalAccuracy').innerText = `${accuracy}%`;
-                document.getElementById('finalStreak').innerText = this.maxStreak;
-
-                // Subtitle op basis van score
-                const subtitle = document.getElementById('resultSubtitle');
-                if (accuracy === 100) {
-                    subtitle.innerText = 'Perfecte score! Je bent een ware TaalNinja meester!';
-                    this.unlockBadge('perfect_score');
-                } else if (accuracy >= 70) {
-                    subtitle.innerText = 'Knap gedaan! Je hebt de Nederlandse taal al goed onder de knie.';
-                } else {
-                    subtitle.innerText = 'Blijf oefenen! Oefening baart kunst.';
-                }
-
-                this.unlockBadge('first_win');
-
-                if (this.score > 500) {
-                    this.unlockBadge('high_score');
-                }
-
-                // Highscore opslaan
                 if (this.score > this.highScore) {
                     this.highScore = this.score;
-                    localStorage.setItem('taalninja_highscore', this.highScore);
-                    document.getElementById('highScoreText').innerText = `Highscore: ${this.highScore}`;
+                    localStorage.setItem('tn_highscore', this.highScore);
+                }
+
+                document.getElementById('resScore').innerText = this.score;
+                document.getElementById('resCoins').innerText = `+${earnedCoins} 🪙`;
+                document.getElementById('resCombo').innerText = `${this.streak} 🔥`;
+
+                this.updateGlobalHUD();
+            }
+
+            restartGame() {
+                this.startMode(this.mode);
+            }
+
+            renderShop() {
+                const grid = document.getElementById('avatarShopGrid');
+                grid.innerHTML = avatarCatalog.map(av => {
+                    const isUnlocked = this.unlockedAvatars.includes(av.id);
+                    const isSelected = this.activeAvatar === av.icon;
+                    return `
+                        <div class="glass-card p-4 rounded-2xl flex flex-col items-center space-y-2 text-center border-2 ${isSelected ? 'border-amber-400 bg-amber-400/10' : 'border-transparent'}">
+                            <span class="text-4xl floating">${av.icon}</span>
+                            <span class="font-extrabold text-xs">${av.name}</span>
+                            ${isUnlocked ? `
+                                <button onclick="game.selectAvatar('${av.icon}')" class="px-3 py-1 bg-emerald-500 text-white rounded-lg font-bold text-xs w-full">
+                                    ${isSelected ? 'Actief' : 'Kiezen'}
+                                </button>
+                            ` : `
+                                <button onclick="game.buyAvatar('${av.id}', ${av.price}, '${av.icon}')" class="px-3 py-1 bg-amber-500 text-white rounded-lg font-bold text-xs w-full flex items-center justify-center space-x-1">
+                                    <span>${av.price}</span>
+                                    <span>🪙</span>
+                                </button>
+                            `}
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            selectAvatar(icon) {
+                this.activeAvatar = icon;
+                localStorage.setItem('tn_avatar', icon);
+                this.updateGlobalHUD();
+                this.renderShop();
+            }
+
+            buyAvatar(id, price, icon) {
+                if (this.coins >= price) {
+                    this.coins -= price;
+                    this.unlockedAvatars.push(id);
+                    localStorage.setItem('tn_coins', this.coins);
+                    localStorage.setItem('tn_unlocked_avatars', JSON.stringify(this.unlockedAvatars));
+                    this.selectAvatar(icon);
+                } else {
+                    alert('Niet genoeg munten!');
+                }
+            }
+
+            buyPowerUp(type, price) {
+                if (this.coins >= price) {
+                    this.coins -= price;
+                    this.powerUps[type]++;
+                    localStorage.setItem('tn_coins', this.coins);
+                    localStorage.setItem('tn_powerups', JSON.stringify(this.powerUps));
+                    this.updateGlobalHUD();
+                    this.playSfx(800, 0.2);
+                } else {
+                    alert('Niet genoeg munten!');
                 }
             }
         }
 
-        // Initialize Game Instance
-        const game = new TaalGame();
+        // Start het spel
+        const game = new TaalNinjaGame();
     </script>
 </body>
 </html>
