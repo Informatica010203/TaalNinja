@@ -3,22 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TaalNinja 3.0 - Multimode & Accounts</title>
+    <title>TaalNinja 4.5 - Verbeterde Game Modus Edition</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    
     <style>
         body {
             font-family: 'Outfit', sans-serif;
             transition: background 0.5s ease, color 0.5s ease;
             min-height: 100vh;
             user-select: none;
+            overflow-x: hidden;
         }
 
-        /* Thema CSS Variabelen & Modus Styling */
+        /* Thema Stijlen */
         body.theme-sunny {
             background: linear-gradient(135deg, #e0f2fe 0%, #f0fdf4 50%, #fef3c7 100%);
             color: #0f172a;
@@ -41,15 +43,15 @@
         }
         
         body.theme-sunny .glass-card, body.theme-sakura .glass-card {
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.8);
-            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.08);
         }
 
         body.theme-dark .glass-card, body.theme-cyber .glass-card {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.12);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.2);
@@ -66,18 +68,9 @@
             transform: translateY(0) scale(0.97);
         }
 
-        @keyframes pulse-shake {
-            0%, 100% { transform: translateX(0); }
-            20%, 60% { transform: translateX(-6px); }
-            40%, 80% { transform: translateX(6px); }
-        }
-        .shake {
-            animation: pulse-shake 0.4s ease-in-out;
-        }
-
         @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-8px) rotate(2deg); }
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
         }
         .floating {
             animation: float 3.5s ease-in-out infinite;
@@ -91,92 +84,62 @@
             animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
-        /* Arena Effecten */
-        .slash-anim {
-            position: absolute;
-            width: 6px;
-            height: 120px;
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 0 15px #f59e0b, 0 0 30px #ef4444;
-            animation: slashEffect 0.25s ease-out forwards;
-            pointer-events: none;
-            z-index: 50;
+        canvas {
+            display: block;
+            touch-action: none;
         }
-        @keyframes slashEffect {
-            0% { transform: translate(-50%, -50%) scale(0.5) rotate(var(--rot)); opacity: 1; }
-            100% { transform: translate(-50%, -50%) scale(2.5) rotate(var(--rot)); opacity: 0; }
+
+        .anonymous-option {
+            background-color: #1e293b;
+            color: #ffffff;
+            border: 2px solid #475569;
+            border-radius: 0.85rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: transform 0.15s ease, background-color 0.2s ease;
         }
-        
-        .enemy-card {
-            position: absolute;
-            transform: translate(-50%, -50%);
-            transition: filter 0.2s, opacity 0.2s;
-            will-change: left, top;
-            z-index: 10;
-        }
-        .enemy-card:active {
-            transform: translate(-50%, -50%) scale(0.9);
-        }
-        .player-hit {
-            animation: pulse-shake 0.4s ease-in-out;
-            filter: drop-shadow(0 0 20px #e11d48);
-        }
-        .frozen-arena {
-            background: linear-gradient(135deg, rgba(186, 230, 253, 0.3) 0%, rgba(125, 211, 252, 0.3) 100%) !important;
-            box-shadow: inset 0 0 20px rgba(56, 189, 248, 0.5);
+        .anonymous-option:hover {
+            background-color: #334155;
+            border-color: #64748b;
         }
     </style>
 </head>
 <body class="theme-sunny flex flex-col min-h-screen relative">
 
-    <!-- LOGIN & REGISTRATIE SCHERM -->
-    <div id="loginScreen" class="absolute inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+    <div id="loginScreen" class="absolute inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-md p-4">
         <div class="glass-card bg-white/95 max-w-sm w-full p-6 sm:p-8 rounded-3xl text-center space-y-5 shadow-2xl pop-in">
             <div class="text-5xl sm:text-6xl mb-1 floating">🥷</div>
             <div>
-                <h1 class="text-3xl font-black bg-gradient-to-r from-indigo-600 to-rose-500 bg-clip-text text-transparent">TaalNinja 3.0</h1>
-                <p class="text-xs sm:text-sm opacity-70 font-semibold mt-1">Meld je aan om je voortgang op te slaan</p>
+                <h1 class="text-3xl font-black bg-gradient-to-r from-indigo-600 via-pink-500 to-amber-500 bg-clip-text text-transparent">TaalNinja 4.5</h1>
+                <p class="text-xs sm:text-sm opacity-75 font-semibold mt-1">Gefixte & Gebalanceerde Games!</p>
             </div>
 
-            <!-- TAB KROON -->
+            <!-- Tab Switcher -->
             <div class="flex rounded-xl bg-gray-200/80 p-1 font-bold text-xs">
                 <button id="tabBtnLogin" onclick="app.switchAuthTab('login')" class="flex-1 py-2 rounded-lg bg-white shadow-sm text-indigo-600 transition">Inloggen</button>
                 <button id="tabBtnRegister" onclick="app.switchAuthTab('register')" class="flex-1 py-2 rounded-lg text-gray-500 transition">Registreren</button>
             </div>
 
-            <!-- FOUTMELDING MBOX -->
             <div id="authError" class="hidden p-3 rounded-xl bg-rose-100 border border-rose-300 text-rose-700 font-bold text-xs text-center"></div>
 
-            <!-- INLOG FORMULIER -->
+            <!-- Inlog Formulier -->
             <div id="loginForm" class="space-y-3">
-                <div>
-                    <input type="text" id="loginUsername" placeholder="Gebruikersnaam" maxlength="15" 
-                           class="w-full px-4 py-3 rounded-xl bg-gray-100 border-2 border-gray-200 focus:border-indigo-500 focus:outline-none font-bold text-gray-800 transition text-sm">
-                </div>
-                <div>
-                    <input type="password" id="loginPassword" placeholder="Wachtwoord" 
-                           class="w-full px-4 py-3 rounded-xl bg-gray-100 border-2 border-gray-200 focus:border-indigo-500 focus:outline-none font-bold text-gray-800 transition text-sm">
-                </div>
+                <input type="text" id="loginUsername" placeholder="Gebruikersnaam" maxlength="15" 
+                       class="w-full px-4 py-3 rounded-xl bg-gray-100 border-2 border-gray-200 focus:border-indigo-500 focus:outline-none font-bold text-gray-800 transition text-sm">
+                <input type="password" id="loginPassword" placeholder="Wachtwoord" 
+                       class="w-full px-4 py-3 rounded-xl bg-gray-100 border-2 border-gray-200 focus:border-indigo-500 focus:outline-none font-bold text-gray-800 transition text-sm">
                 <button onclick="app.login()" class="w-full py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-xl shadow-lg btn-hover transition">
                     Inloggen & Spelen
                 </button>
             </div>
 
-            <!-- REGISTRATIE FORMULIER -->
+            <!-- Registratie Formulier -->
             <div id="registerForm" class="hidden space-y-3">
-                <div>
-                    <input type="text" id="regUsername" placeholder="Gebruikersnaam (uniek)" maxlength="15" 
-                           class="w-full px-4 py-3 rounded-xl bg-gray-100 border-2 border-gray-200 focus:border-indigo-500 focus:outline-none font-bold text-gray-800 transition text-sm">
-                </div>
-                <div>
-                    <input type="email" id="regEmail" placeholder="E-mailadres (optioneel)" 
-                           class="w-full px-4 py-3 rounded-xl bg-gray-100 border-2 border-gray-200 focus:border-indigo-500 focus:outline-none font-bold text-gray-800 transition text-sm">
-                </div>
-                <div>
-                    <input type="password" id="regPassword" placeholder="Wachtwoord (min. 4 tekens)" 
-                           class="w-full px-4 py-3 rounded-xl bg-gray-100 border-2 border-gray-200 focus:border-indigo-500 focus:outline-none font-bold text-gray-800 transition text-sm">
-                </div>
+                <input type="text" id="regUsername" placeholder="Unieke Gebruikersnaam" maxlength="15" 
+                       class="w-full px-4 py-3 rounded-xl bg-gray-100 border-2 border-gray-200 focus:border-indigo-500 focus:outline-none font-bold text-gray-800 transition text-sm">
+                <input type="email" id="regEmail" placeholder="E-mailadres (optioneel)" 
+                       class="w-full px-4 py-3 rounded-xl bg-gray-100 border-2 border-gray-200 focus:border-indigo-500 focus:outline-none font-bold text-gray-800 transition text-sm">
+                <input type="password" id="regPassword" placeholder="Wachtwoord (min. 4 tekens)" 
+                       class="w-full px-4 py-3 rounded-xl bg-gray-100 border-2 border-gray-200 focus:border-indigo-500 focus:outline-none font-bold text-gray-800 transition text-sm">
                 <button onclick="app.register()" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold rounded-xl shadow-lg btn-hover transition">
                     Account Aanmaken
                 </button>
@@ -184,7 +147,6 @@
         </div>
     </div>
 
-    <!-- Header / Navigatie (Verborgen tijdens login) -->
     <header id="mainHeader" class="hidden w-full max-w-5xl mx-auto px-4 py-4 flex justify-between items-center z-20">
         <div class="flex items-center space-x-3 cursor-pointer" onclick="app.showHome()">
             <div id="activeAvatarIcon" class="w-12 h-12 bg-gradient-to-tr from-amber-400 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg text-2xl font-black floating">
@@ -214,70 +176,68 @@
         </div>
     </header>
 
-    <!-- Hoofdinhoud -->
     <main id="mainContainer" class="hidden w-full max-w-4xl mx-auto px-4 flex-grow flex flex-col justify-center py-2 z-10">
 
-        <!-- SCREEN 1: HOOFDMENU -->
+        <!-- HOOFDMENU -->
         <section id="homeScreen" class="pop-in space-y-6 my-auto">
-            
-            <div class="glass-card p-6 sm:p-8 rounded-3xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6">
-                <div class="space-y-2 text-center md:text-left z-10">
-                    <span class="px-3 py-1 rounded-full bg-amber-500/20 text-amber-600 font-bold text-xs uppercase tracking-wider border border-amber-500/30">
-                        Meerdere Spelmodi
+            <div class="glass-card p-6 sm:p-8 rounded-3xl text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="space-y-2">
+                    <span class="px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-700 font-bold text-xs uppercase tracking-wider">
+                        Geüpdatete Spelmechanieken
                     </span>
-                    <h2 class="text-3xl sm:text-4xl font-black">Kies je training!</h2>
-                    <p class="text-sm opacity-80 max-w-md">Ontdek compleet verschillende games om je Nederlands te oefenen.</p>
+                    <h2 class="text-3xl sm:text-4xl font-black">Kies je mini-game!</h2>
+                    <p class="text-sm opacity-80 max-w-md">Duidelijke besturing, rustige snelheden & veilige doolhofbesturing!</p>
                 </div>
             </div>
 
             <!-- Modus Selectie Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 
-                <!-- Arcade Modus -->
-                <div onclick="app.startMode('arcade')" class="glass-card p-6 rounded-2xl cursor-pointer btn-hover border-2 border-indigo-500/30 hover:border-indigo-500 flex flex-col justify-between group">
+                <!-- GAME 1: NINJA SHURIKEN (DOELSCHIETEN) -->
+                <div onclick="app.startMode('archer')" class="glass-card p-6 rounded-2xl cursor-pointer btn-hover border-2 border-indigo-500/30 hover:border-indigo-500 flex flex-col justify-between group">
                     <div class="flex items-start justify-between">
-                        <div class="w-12 h-12 rounded-xl bg-indigo-500/20 text-indigo-600 flex items-center justify-center text-2xl font-black">⚔️</div>
-                        <span class="px-2.5 py-1 rounded-lg bg-indigo-500 text-white font-black text-[10px]">360° VERDEDIGING</span>
+                        <div class="w-12 h-12 rounded-xl bg-indigo-500/20 text-indigo-600 flex items-center justify-center text-2xl font-black">🎯</div>
+                        <span class="px-2.5 py-1 rounded-lg bg-indigo-500 text-white font-black text-[10px]">DOELSCHIETEN</span>
                     </div>
                     <div class="mt-4">
-                        <h3 class="text-xl font-black">Arcade Arena</h3>
-                        <p class="text-xs opacity-75 mt-1">Vijanden vallen van alle kanten aan. Sla het juiste antwoord weg voordat ze je bereiken!</p>
+                        <h3 class="text-xl font-black">Ninja Shuriken</h3>
+                        <p class="text-xs opacity-75 mt-1">Super intuïtief! Schiet een Shuriken recht op het bord met het juiste antwoord.</p>
                     </div>
                 </div>
 
-                <!-- Blitz Modus (Vallend) -->
-                <div onclick="app.startMode('blitz')" class="glass-card p-6 rounded-2xl cursor-pointer btn-hover border-2 border-amber-500/30 hover:border-amber-500 flex flex-col justify-between group">
+                <!-- GAME 2: WORD SLASHER (RUSTIGER) -->
+                <div onclick="app.startMode('slasher')" class="glass-card p-6 rounded-2xl cursor-pointer btn-hover border-2 border-amber-500/30 hover:border-amber-500 flex flex-col justify-between group">
                     <div class="flex items-start justify-between">
-                        <div class="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-600 flex items-center justify-center text-2xl font-black">☄️</div>
-                        <span class="px-2.5 py-1 rounded-lg bg-amber-500 text-white font-black text-[10px]">VALLENDE BLOKKEN</span>
+                        <div class="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-600 flex items-center justify-center text-2xl font-black">⚔️</div>
+                        <span class="px-2.5 py-1 rounded-lg bg-amber-500 text-white font-black text-[10px]">HERZIENE SLASHER</span>
                     </div>
                     <div class="mt-4">
-                        <h3 class="text-xl font-black">Zwaartekracht Blitz</h3>
-                        <p class="text-xs opacity-75 mt-1">Antwoorden vallen razendsnel uit de lucht. Vang de juiste voordat hij de grond raakt!</p>
+                        <h3 class="text-xl font-black">Word Slasher</h3>
+                        <p class="text-xs opacity-75 mt-1">Nu veel trager & rustiger! Zweef door de lucht en hak het juiste woord door.</p>
                     </div>
                 </div>
 
-                <!-- Boss Battle -->
-                <div onclick="app.startMode('boss')" class="glass-card p-6 rounded-2xl cursor-pointer btn-hover border-2 border-rose-500/30 hover:border-rose-500 flex flex-col justify-between group">
+                <!-- GAME 3: DOOLHOF EXPLORER (MET INTERACTIE) -->
+                <div onclick="app.startMode('maze')" class="glass-card p-6 rounded-2xl cursor-pointer btn-hover border-2 border-rose-500/30 hover:border-rose-500 flex flex-col justify-between group">
                     <div class="flex items-start justify-between">
-                        <div class="w-12 h-12 rounded-xl bg-rose-500/20 text-rose-600 flex items-center justify-center text-2xl font-black">🐉</div>
-                        <span class="px-2.5 py-1 rounded-lg bg-rose-500 text-white font-black text-[10px]">BAASGEVECHT</span>
+                        <div class="w-12 h-12 rounded-xl bg-rose-500/20 text-rose-600 flex items-center justify-center text-2xl font-black">🗺️</div>
+                        <span class="px-2.5 py-1 rounded-lg bg-rose-500 text-white font-black text-[10px]">VEILIGE EXPLORER</span>
                     </div>
                     <div class="mt-4">
-                        <h3 class="text-xl font-black">Draken Jacht</h3>
-                        <p class="text-xs opacity-75 mt-1">Val de draak aan door moeilijke vragen goed te beantwoorden. Zorg dat je niet geraakt wordt.</p>
+                        <h3 class="text-xl font-black">Ninja Doolhof</h3>
+                        <p class="text-xs opacity-75 mt-1">Doolhof zonder per ongelukken! Druk op de "PAK OP" knop als je bij de juiste schat staat.</p>
                     </div>
                 </div>
 
-                <!-- Oefenmodus (Klassiek) -->
+                <!-- GAME 4: RUSTIGE OEFENMODUS -->
                 <div onclick="app.startMode('practice')" class="glass-card p-6 rounded-2xl cursor-pointer btn-hover border-2 border-emerald-500/30 hover:border-emerald-500 flex flex-col justify-between group">
                     <div class="flex items-start justify-between">
                         <div class="w-12 h-12 rounded-xl bg-emerald-500/20 text-emerald-600 flex items-center justify-center text-2xl font-black">📖</div>
                         <span class="px-2.5 py-1 rounded-lg bg-emerald-500 text-white font-black text-[10px]">KLASSIEK / RUSTIG</span>
                     </div>
                     <div class="mt-4">
-                        <h3 class="text-xl font-black">Oefenmodus</h3>
-                        <p class="text-xs opacity-75 mt-1">Geen tijdslimiet, geen bewegende objecten. Oefen op je eigen tempo met duidelijke knoppen.</p>
+                        <h3 class="text-xl font-black">Oefenstudio</h3>
+                        <p class="text-xs opacity-75 mt-1">Geen tijdsdruk. Rustig antwoorden en grammaticale uitleg lezen.</p>
                     </div>
                 </div>
 
@@ -286,103 +246,98 @@
             <div class="glass-card p-4 rounded-2xl flex justify-around items-center text-center">
                 <div>
                     <div class="text-xs opacity-70 font-semibold">Hoogste Score</div>
-                    <div class="text-lg font-black text-indigo-500" id="statHighScore">0</div>
+                    <div class="text-lg font-black text-indigo-600" id="statHighScore">0</div>
                 </div>
             </div>
         </section>
 
-        <!-- SCREEN 2: GAMEPLAY SCREEN -->
-        <section id="gameScreen" class="hidden flex-col h-[85vh] sm:h-[80vh] space-y-3 relative z-10">
+        <section id="gameScreen" class="hidden flex-col space-y-3 relative z-10">
             
-            <!-- Top HUD -->
-            <div class="glass-card p-3 sm:p-4 rounded-2xl flex justify-between items-center gap-3 shrink-0">
+            <!-- HUD Bar -->
+            <div class="glass-card p-3 rounded-2xl flex justify-between items-center gap-3 shrink-0">
                 <div class="flex items-center space-x-1" id="heartsContainer"></div>
+                <div class="text-center">
+                    <span id="gameModeBadge" class="px-2.5 py-1 rounded-lg bg-indigo-500/20 text-indigo-700 font-extrabold text-[10px] uppercase"></span>
+                </div>
                 <div class="text-right">
                     <span class="text-[10px] opacity-70 font-bold block leading-none">SCORE</span>
-                    <span id="currentScore" class="text-xl sm:text-2xl font-black text-indigo-600 leading-none">0</span>
+                    <span id="currentScore" class="text-xl font-black text-indigo-600 leading-none">0</span>
                 </div>
             </div>
 
-            <!-- Boss HP (Indien actief) -->
-            <div id="bossHpContainer" class="hidden glass-card p-3 rounded-2xl border-2 border-rose-500/40 shrink-0">
-                <div class="flex justify-between items-center font-black text-xs sm:text-sm mb-1.5">
-                    <span class="text-rose-600">🐉 Grammatica Draak</span>
-                    <span id="bossHpText" class="text-xs text-rose-500">100 / 100 HP</span>
-                </div>
-                <div class="w-full bg-gray-300/40 rounded-full h-3 overflow-hidden">
-                    <div id="bossHpBar" class="bg-gradient-to-r from-rose-500 to-red-600 h-full w-full transition-all duration-300"></div>
-                </div>
-            </div>
-
-            <!-- Hoofd Arena/Vraag Container -->
-            <div class="glass-card p-4 sm:p-6 rounded-3xl text-center flex flex-col flex-grow relative overflow-hidden shadow-2xl border-t border-white/40">
+            <!-- Vraag Container -->
+            <div class="glass-card p-4 sm:p-5 rounded-3xl text-center flex flex-col relative overflow-hidden shadow-2xl">
                 
-                <div class="space-y-2 mb-3 z-20 relative shrink-0">
+                <div class="space-y-1 mb-3 z-20 relative shrink-0">
                     <span id="questionTag" class="px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-700 font-extrabold text-[10px] uppercase"></span>
-                    <h2 id="questionText" class="text-xl sm:text-2xl font-black leading-snug min-h-[3rem] flex items-center justify-center"></h2>
+                    <h2 id="questionText" class="text-lg sm:text-xl font-black leading-snug min-h-[2.5rem] flex items-center justify-center"></h2>
                 </div>
 
-                <!-- DE ACTIE ARENA (Bewegende objecten) -->
-                <div id="actionArena" class="flex-grow relative bg-slate-400/10 rounded-2xl overflow-hidden shadow-inner w-full cursor-crosshair transition-colors duration-300">
-                    <!-- Speler character -->
-                    <div id="ninjaPlayer" class="absolute text-5xl sm:text-6xl z-20 transition-all duration-200 filter drop-shadow-lg" style="top:50%; left:50%; transform: translate(-50%, -50%);">
-                        🥷
+                <!-- CANVAS GAME CONTAINER -->
+                <div id="canvasContainer" class="relative w-full h-[320px] sm:h-[360px] bg-slate-900 rounded-2xl overflow-hidden shadow-inner border border-slate-700 flex items-center justify-center">
+                    <canvas id="gameCanvas" class="w-full h-full"></canvas>
+
+                    <!-- Overlay Besturingsknoppen voor Mobiel/Touch in Maze -->
+                    <div id="controlsOverlay" class="hidden absolute bottom-2 left-2 right-2 flex justify-between items-end z-30 pointer-events-none">
+                        <!-- Left D-pad Controls -->
+                        <div id="dpadControls" class="flex flex-col items-center gap-1 pointer-events-auto">
+                            <button onmousedown="app.handleDirInput('up')" ontouchstart="app.handleDirInput('up')" class="w-11 h-11 bg-indigo-600/90 text-white rounded-xl font-black text-xl shadow-lg">⬆️</button>
+                            <div class="flex gap-1">
+                                <button onmousedown="app.handleDirInput('left')" ontouchstart="app.handleDirInput('left')" class="w-11 h-11 bg-indigo-600/90 text-white rounded-xl font-black text-xl shadow-lg">⬅️</button>
+                                <button onmousedown="app.handleDirInput('down')" ontouchstart="app.handleDirInput('down')" class="w-11 h-11 bg-indigo-600/90 text-white rounded-xl font-black text-xl shadow-lg">⬇️</button>
+                                <button onmousedown="app.handleDirInput('right')" ontouchstart="app.handleDirInput('right')" class="w-11 h-11 bg-indigo-600/90 text-white rounded-xl font-black text-xl shadow-lg">➡️</button>
+                            </div>
+                        </div>
+
+                        <!-- Maze Action Button -->
+                        <div id="mazeInteractContainer" class="hidden pointer-events-auto">
+                            <button id="mazeInteractBtn" onclick="app.mazePickUp()" class="px-5 py-3.5 bg-amber-500 hover:bg-amber-600 text-white rounded-2xl font-black text-sm shadow-2xl btn-hover flex items-center gap-2 border-2 border-amber-300">
+                                ✋ PAK OP (E / Spatie)
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <!-- DE STATISCHE OEFEN ARENA (Voor Practice Mode) -->
-                <div id="practiceArena" class="hidden flex-grow flex-col justify-center space-y-3 w-full">
-                    <!-- Statische knoppen komen hier -->
-                </div>
+                <!-- STATISCHE OEFEN ARENA -->
+                <div id="practiceArena" class="hidden flex flex-col space-y-2.5 w-full py-2"></div>
 
-                <!-- Power-ups Bar (Alleen in actiemodi) -->
-                <div id="powerupBar" class="pt-3 mt-3 border-t border-gray-300/30 flex justify-center items-center space-x-2 sm:space-x-4 shrink-0 z-20">
-                    <button onclick="app.usePowerUp('shield')" class="px-2 sm:px-3 py-2 glass-card hover:bg-white rounded-xl text-xs font-bold flex space-x-1.5 btn-hover">
-                        <span>🛡️ Schild</span> <span id="puShieldCount" class="px-1.5 rounded-md bg-indigo-500 text-white">0</span>
-                    </button>
-                    <button onclick="app.usePowerUp('freeze')" class="px-2 sm:px-3 py-2 glass-card hover:bg-white rounded-xl text-xs font-bold flex space-x-1.5 btn-hover">
-                        <span>❄️ Bevries</span> <span id="puFreezeCount" class="px-1.5 rounded-md bg-indigo-500 text-white">0</span>
-                    </button>
-                </div>
-
-                <!-- Feedback Popup -->
-                <div id="feedbackBox" class="hidden absolute inset-0 bg-white/90 backdrop-blur-sm z-50 flex flex-col items-center justify-center p-6 text-center pop-in rounded-3xl">
-                    <div id="feedbackIcon" class="text-6xl mb-4 floating"></div>
-                    <h4 id="feedbackTitle" class="font-black text-2xl sm:text-3xl mb-2"></h4>
-                    <p id="feedbackText" class="text-sm sm:text-base opacity-90 leading-relaxed font-medium text-gray-800"></p>
-                    <button onclick="app.nextQuestion()" class="mt-8 px-8 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-2xl shadow-xl transition btn-hover">
-                        Volgende
+                <!-- Feedback Overlay -->
+                <div id="feedbackBox" class="hidden absolute inset-0 bg-white/95 backdrop-blur-md z-50 flex flex-col items-center justify-center p-6 text-center pop-in rounded-3xl">
+                    <div id="feedbackIcon" class="text-6xl mb-3 floating"></div>
+                    <h4 id="feedbackTitle" class="font-black text-2xl sm:text-3xl mb-1"></h4>
+                    <p id="feedbackText" class="text-sm opacity-90 leading-relaxed font-medium text-gray-800 max-w-md"></p>
+                    <button onclick="app.nextQuestion()" class="mt-6 px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-2xl shadow-xl transition btn-hover">
+                        Volgende Vraag
                     </button>
                 </div>
             </div>
         </section>
 
-        <!-- SCREEN 3: RESULTATEN -->
+        <!-- RESULTATEN SCHERM -->
         <section id="resultScreen" class="hidden pop-in space-y-6 text-center my-auto">
             <div class="glass-card p-8 rounded-3xl space-y-6">
                 <div class="text-6xl floating">👑</div>
                 <div>
-                    <h2 class="text-3xl font-black">Training Voltooid!</h2>
+                    <h2 class="text-3xl font-black">Gefeliciteerd!</h2>
+                    <p class="text-xs opacity-70 mt-1">Je hebt de training voltooid.</p>
                 </div>
                 <div class="grid grid-cols-2 gap-3 max-w-sm mx-auto">
                     <div class="glass-card p-4 rounded-2xl">
-                        <div class="text-xs opacity-70 font-semibold">Score</div>
+                        <div class="text-xs opacity-70 font-semibold">Behaalde Score</div>
                         <div id="resScore" class="text-2xl font-black text-indigo-600">0</div>
                     </div>
                     <div class="glass-card p-4 rounded-2xl">
-                        <div class="text-xs opacity-70 font-semibold">Verdiend</div>
+                        <div class="text-xs opacity-70 font-semibold">Munten Verdiend</div>
                         <div id="resCoins" class="text-2xl font-black text-amber-500">+0 🪙</div>
                     </div>
                 </div>
-                <div class="flex justify-center gap-3">
-                    <button onclick="app.showHome()" class="px-8 py-3.5 bg-indigo-600 text-white font-black rounded-2xl btn-hover">
-                        Hoofdmenu
-                    </button>
-                </div>
+                <button onclick="app.showHome()" class="px-8 py-3.5 bg-indigo-600 text-white font-black rounded-2xl btn-hover">
+                    Naar Hoofdmenu
+                </button>
             </div>
         </section>
 
-        <!-- SCREEN 4: SHOP -->
+        <!-- WINKEL SCHERM -->
         <section id="shopScreen" class="hidden pop-in space-y-6 my-auto">
             <div class="flex items-center justify-between">
                 <button onclick="app.showHome()" class="p-2.5 glass-card rounded-xl hover:bg-white/20"><i class="fas fa-arrow-left"></i></button>
@@ -391,41 +346,29 @@
             </div>
 
             <div class="space-y-3">
-                <h3 class="text-lg font-black">🥷 Avatars</h3>
+                <h3 class="text-lg font-black">🥷 Kies je Avatar</h3>
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-4" id="avatarShopGrid"></div>
-            </div>
-
-            <div class="space-y-3">
-                <h3 class="text-lg font-black">⚡ Power-ups (50🪙 p.s.)</h3>
-                <div class="grid grid-cols-2 gap-4">
-                    <button onclick="app.buyPowerUp('shield', 50)" class="glass-card p-4 rounded-2xl btn-hover font-bold text-sm">
-                        🛡️ Koop Schild
-                    </button>
-                    <button onclick="app.buyPowerUp('freeze', 50)" class="glass-card p-4 rounded-2xl btn-hover font-bold text-sm">
-                        ❄️ Koop Tijdbevriezer
-                    </button>
-                </div>
             </div>
         </section>
     </main>
 
     <!-- INSTELLINGEN MODAL -->
     <div id="settingsModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-md z-50 flex items-center justify-center p-4">
-        <div class="glass-card bg-white/90 max-w-md w-full p-6 rounded-3xl space-y-6 pop-in">
+        <div class="glass-card bg-white/95 max-w-md w-full p-6 rounded-3xl space-y-6 pop-in">
             <div class="flex justify-between items-center border-b pb-3">
                 <h3 class="text-xl font-black">Instellingen</h3>
                 <button onclick="app.toggleSettingsModal(false)" class="text-gray-400"><i class="fas fa-times"></i></button>
             </div>
             <div class="space-y-3">
-                <label class="text-xs font-bold uppercase">Thema</label>
+                <label class="text-xs font-bold uppercase">Thema Selecteren</label>
                 <div class="grid grid-cols-2 gap-3">
-                    <button onclick="app.setTheme('theme-sunny')" class="p-2 rounded-xl border-2 border-amber-400 bg-amber-50 font-bold text-xs btn-hover text-slate-900">☀️ Zonnig</button>
-                    <button onclick="app.setTheme('theme-sakura')" class="p-2 rounded-xl border-2 border-pink-300 bg-pink-50 font-bold text-xs btn-hover text-slate-900">🌸 Sakura</button>
-                    <button onclick="app.setTheme('theme-dark')" class="p-2 rounded-xl border-2 border-indigo-900 bg-slate-800 text-white font-bold text-xs btn-hover">🌙 Nacht</button>
-                    <button onclick="app.setTheme('theme-cyber')" class="p-2 rounded-xl border-2 border-cyan-500 bg-purple-900 text-cyan-300 font-bold text-xs btn-hover">⚡ Cyber</button>
+                    <button onclick="app.setTheme('theme-sunny')" class="p-2.5 rounded-xl border-2 border-amber-400 bg-amber-50 font-bold text-xs text-slate-900 btn-hover">☀️ Zonnig</button>
+                    <button onclick="app.setTheme('theme-sakura')" class="p-2.5 rounded-xl border-2 border-pink-300 bg-pink-50 font-bold text-xs text-slate-900 btn-hover">🌸 Sakura</button>
+                    <button onclick="app.setTheme('theme-dark')" class="p-2.5 rounded-xl border-2 border-indigo-900 bg-slate-800 text-white font-bold text-xs btn-hover">🌙 Nacht Ninja</button>
+                    <button onclick="app.setTheme('theme-cyber')" class="p-2.5 rounded-xl border-2 border-cyan-500 bg-purple-900 text-cyan-300 font-bold text-xs btn-hover">⚡ Cyber Neon</button>
                 </div>
             </div>
-            <button onclick="app.logout()" class="w-full py-2 bg-red-100 text-red-600 font-bold rounded-xl hover:bg-red-200">
+            <button onclick="app.logout()" class="w-full py-2.5 bg-red-100 text-red-600 font-bold rounded-xl hover:bg-red-200">
                 Uitloggen
             </button>
             <button onclick="app.toggleSettingsModal(false)" class="w-full py-3 bg-indigo-600 text-white font-extrabold rounded-2xl">
@@ -435,16 +378,23 @@
     </div>
 
     <script>
-        // Database van vragen (Worden gebruikt voor alle modi)
         const gameQuestions = [
             { tag: 'Spelling (d/t/dt)', q: 'Hij ...... (beloven) mij altijd te helpen.', options: ['beloofd', 'belooft', 'beloofdt', 'beloof'], correct: 1, exp: 'Tegenwoordige tijd hij-vorm is altijd stam + t.' },
-            { tag: 'Spelling (Voltooid)', q: 'Zij heeft de zaak ...... (onderzoeken).', options: ['onderzoekt', 'onderzocht', 'onderzoekte', 'onderzochtd'], correct: 1, exp: 'Onregelmatig werkwoord: onderzoeken -> heeft onderzocht.' },
-            { tag: 'Spelling', q: '...... jij morgen ook mee?', options: ['Gaat', 'Ga', 'Gaadt', 'Gaad'], correct: 1, exp: 'Als "jij" achter het werkwoord staat, vervalt de -t (behalve bij verleden tijd).' },
-            { tag: 'Spelling (Verleden Tijd)', q: 'Zij ...... (fietsen) gisteren door de storm.', options: ['fietste', 'fietstte', 'fietsde', 'fietsten'], correct: 0, exp: 'Stam is fiets (s zit in \'t Kofschip) -> verleden tijd krijgt +te.' },
-            { tag: 'Woordsoorten', q: 'Wat is **snelle** in: "De snelle auto"?', options: ['Zelfst. naamwoord', 'Bijvoeglijk naamwoord', 'Werkwoord', 'Voorzetsel'], correct: 1, exp: '"Snelle" zegt iets over auto (bijvoeglijk naamwoord).' },
-            { tag: 'Spreekwoorden', q: 'Nu komt de aap uit de ......', options: ['mouw', 'doos', 'kast', 'zak'], correct: 0, exp: 'Betekenis: de echte bedoeling wordt duidelijk.' },
-            { tag: 'Spreekwoorden', q: 'Als de kat van huis is, ...... de muizen op tafel.', options: ['dansen', 'springen', 'lopen', 'feesten'], correct: 0, exp: 'Zonder toezicht doen mensen hun eigen zin.' },
-            { tag: 'Woordenschat', q: 'Wat is een synoniem van **continu**?', options: ['Snel', 'Voortdurend', 'Zelden', 'Onderbroken'], correct: 1, exp: 'Continu betekent onafgebroken, voortdurend.' }
+            { tag: 'Spelling (d/t/dt)', q: '...... (worden) jij later ook dokter?', options: ['Wordt', 'Word', 'Worddt', 'Worden'], correct: 1, exp: 'Bij "jij" achter de persoonsvorm vervalt de -t (stam = word).' },
+            { tag: 'Spelling (d/t/dt)', q: 'Mijn zus ...... (vinden) dat een mooi boek.', options: ['vind', 'vindt', 'vint', 'vinded'], correct: 1, exp: 'Zij-vorm tegenwoordige tijd = stam (vind) + t.' },
+            { tag: 'Spelling (d/t/dt)', q: 'Wat ...... (bedoelen) jij daarmee?', options: ['bedoeld', 'bedoelt', 'bedoel', 'bedoeldt'], correct: 2, exp: 'Jij staat achter het werkwoord, dus alleen de stam (bedoel).' },
+            { tag: 'Spelling (d/t/dt)', q: 'De leraar ...... (antwoorden) op de vraag.', options: ['antwoordt', 'antwoord', 'antwoordde', 'antwoort'], correct: 0, exp: 'Tegenwoordige tijd hij-vorm = stam (antwoord) + t = antwoordt.' },
+            { tag: 'Voltooid Deelwoord', q: 'Zij heeft de hele middag ...... (fietsen).', options: ['gefietst', 'gefietsd', 'gefietste', 'gefietstde'], correct: 0, exp: 'De stam van fietsen is "fiets". De -s zit in \'t kofschip, dus eindigt op -t.' },
+            { tag: 'Voltooid Deelwoord', q: 'Hij heeft het antwoord al ...... (raden).', options: ['geraden', 'geraad', 'geraadt', 'geradent'], correct: 0, exp: 'Raden is een sterk werkwoord: raden - raadde - geraden.' },
+            { tag: 'Lidwoorden (De/Het)', q: '...... meisje loopt over de straat.', options: ['Het', 'De', 'Een', 'Het / De allebei'], correct: 0, exp: 'Verkleinwoorden krijgen altijd het lidwoord "het".' },
+            { tag: 'Lidwoorden (De/Het)', q: '...... boom in de tuin is heel oud.', options: ['De', 'Het', 'Een', 'Geen van beide'], correct: 0, exp: 'Bomen zijn de-woorden: de boom.' },
+            { tag: 'Betrekkelijk Vnw', q: 'Het boek ...... ik lees is spannend.', options: ['dat', 'die', 'wie', 'waar'], correct: 0, exp: 'Het boek -> betrekkelijk voornaamwoord is "dat".' },
+            { tag: 'Betrekkelijk Vnw', q: 'De jongen ...... daar loopt is mijn broer.', options: ['die', 'dat', 'wie', 'waar'], correct: 0, exp: 'De jongen -> betrekkelijk voornaamwoord is "die".' },
+            { tag: 'Spreekwoorden', q: 'Oost west, ...... best.', options: ['thuis', 'eigen', 'overal', 'hier'], correct: 0, exp: 'Betekenis: Het is nergens zo fijn als in je eigen huis.' },
+            { tag: 'Spreekwoorden', q: 'Wie een kuil graaft voor een ander, ......', options: ['valt er zelf in', 'krijgt schone handen', 'wint de wedstrijd', 'heeft veel werk'], correct: 0, exp: 'Als je een ander wilt benadelen, word je er vaak zelf het slachtoffer van.' },
+            { tag: 'Woordsoorten', q: 'Wat is **prachtige** in: "De prachtige bloem"?', options: ['Bijvoeglijk naamwoord', 'Zelfstandig naamwoord', 'Werkwoord', 'Voorzetsel'], correct: 0, exp: 'Geef een eigenschap aan van het zelfstandig naamwoord.' },
+            { tag: 'Woordenschat', q: 'Wat is een synoniem van **gigantisch**?', options: ['Enorm', 'Piepklein', 'Snel', 'Rustig'], correct: 0, exp: 'Gigantisch en enorm betekenen allebei heel groot.' },
+            { tag: 'Spelling (Meervoud)', q: 'Wat is het meervoud van **schip**?', options: ['schepen', 'schippen', 'schepenen', 'schips'], correct: 0, exp: 'Schip verandert in het meervoud van klinker en medeklinker: schepen.' }
         ];
 
         const avatarCatalog = [
@@ -456,30 +406,29 @@
 
         class TaalNinjaApp {
             constructor() {
-                this.users = JSON.parse(localStorage.getItem('tn_accounts')) || {};
+                this.users = JSON.parse(localStorage.getItem('tn_accounts_v4')) || {};
                 this.currentUser = null;
                 this.userData = null;
 
-                // Game Engine
-                this.mode = 'arcade'; 
+                this.mode = 'archer'; 
                 this.questions = [];
                 this.qIndex = 0;
                 this.score = 0;
                 this.hearts = 3;
-                this.bossHp = 100;
-                this.activeShield = false;
-                this.isFrozen = false;
-                
-                this.isPlaying = false;
-                this.enemies = [];
-                this.animationFrame = null;
-                this.lastTime = 0;
+                this.currentOpts = []; // Bevat geschudde antwoorden per vraag
 
-                // Audio context pas aanmaken bij eerste interactie
+                this.canvas = null;
+                this.ctx = null;
+                this.animId = null;
+                this.isPlaying = false;
                 this.audioCtx = null;
+
+                // Game specific states
+                this.archerState = { targets: [], shuriken: null };
+                this.slasherState = { items: [] };
+                this.mazeState = { px: 1, py: 1, grid: [], items: [], ghosts: [] };
             }
 
-            // --- ACCOUNT & AUTH MANAGEMENT ---
             switchAuthTab(tab) {
                 this.hideAuthError();
                 const isLogin = tab === 'login';
@@ -497,9 +446,7 @@
             }
 
             hideAuthError() {
-                const errBox = document.getElementById('authError');
-                errBox.innerText = '';
-                errBox.classList.add('hidden');
+                document.getElementById('authError').classList.add('hidden');
             }
 
             register() {
@@ -508,44 +455,20 @@
                 const email = document.getElementById('regEmail').value.trim();
                 const password = document.getElementById('regPassword').value;
 
-                if (!username) {
-                    this.showAuthError('Vul a.u.b. een gebruikersnaam in.');
-                    return;
-                }
+                if (!username || username.length < 3) return this.showAuthError('Gebruikersnaam moet minstens 3 tekens lang zijn.');
+                if (!password || password.length < 4) return this.showAuthError('Wachtwoord moet minstens 4 tekens lang zijn.');
 
-                if (username.length < 3) {
-                    this.showAuthError('Gebruikersnaam moet minimaal 3 tekens zijn.');
-                    return;
-                }
-
-                if (password.length < 4) {
-                    this.showAuthError('Wachtwoord moet minimaal 4 tekens bevatten.');
-                    return;
-                }
-
-                // Check of account met deze naam al bestaat
                 const existingKey = Object.keys(this.users).find(u => u.toLowerCase() === username.toLowerCase());
-                if (existingKey) {
-                    this.showAuthError('Deze gebruikersnaam bestaat al! Kies een andere naam of log in.');
-                    return;
-                }
+                if (existingKey) return this.showAuthError('Deze gebruikersnaam is al bezet!');
 
-                // Account aanmaken
                 this.users[username] = {
-                    password: password,
-                    email: email || '',
-                    coins: 50,
-                    highScore: 0,
-                    unlockedAvatars: ['ninja_default'],
-                    activeAvatar: '🥷',
-                    theme: 'theme-sunny',
-                    powerUps: { shield: 1, freeze: 1 }
+                    password, email, coins: 50, highScore: 0,
+                    unlockedAvatars: ['ninja_default'], activeAvatar: '🥷', theme: 'theme-sunny'
                 };
 
                 this.currentUser = username;
                 this.userData = this.users[username];
                 this.saveDB();
-
                 this.completeLogin();
             }
 
@@ -554,33 +477,15 @@
                 const username = document.getElementById('loginUsername').value.trim();
                 const password = document.getElementById('loginPassword').value;
 
-                if (!username || !password) {
-                    this.showAuthError('Vul zowel je gebruikersnaam als wachtwoord in.');
-                    return;
-                }
+                if (!username || !password) return this.showAuthError('Vul alle velden in.');
 
-                // Zoek gebruiker op
                 const userKey = Object.keys(this.users).find(u => u.toLowerCase() === username.toLowerCase());
-                
-                if (!userKey) {
-                    this.showAuthError('Geen account gevonden met deze naam. Registreer eerst!');
-                    return;
-                }
+                if (!userKey) return this.showAuthError('Account niet gevonden!');
 
-                const userAcc = this.users[userKey];
-                
-                // Controleer wachtwoord
-                if (userAcc.password && userAcc.password !== password) {
-                    this.showAuthError('Onjuist wachtwoord!');
-                    return;
-                }
+                if (this.users[userKey].password !== password) return this.showAuthError('Onjuist wachtwoord!');
 
                 this.currentUser = userKey;
-                this.userData = userAcc;
-
-                if (!this.userData.password) this.userData.password = password;
-                if (!this.userData.email) this.userData.email = '';
-
+                this.userData = this.users[userKey];
                 this.saveDB();
                 this.completeLogin();
             }
@@ -589,11 +494,12 @@
                 document.getElementById('loginScreen').classList.add('hidden');
                 document.getElementById('mainHeader').classList.remove('hidden');
                 document.getElementById('mainContainer').classList.remove('hidden');
-                
                 document.getElementById('playerNameDisplay').innerText = this.currentUser;
+                
                 this.setTheme(this.userData.theme || 'theme-sunny');
-                this.updateGlobalHUD();
+                this.updateHUD();
                 this.showHome();
+                this.setupKeyboardListeners();
             }
 
             logout() {
@@ -603,109 +509,83 @@
                 document.getElementById('loginScreen').classList.remove('hidden');
                 document.getElementById('mainHeader').classList.add('hidden');
                 document.getElementById('mainContainer').classList.add('hidden');
-                
-                // Wis invulvelden
-                document.getElementById('loginUsername').value = '';
-                document.getElementById('loginPassword').value = '';
-                document.getElementById('regUsername').value = '';
-                document.getElementById('regEmail').value = '';
-                document.getElementById('regPassword').value = '';
-                this.hideAuthError();
-                this.switchAuthTab('login');
             }
 
             saveDB() {
                 if (this.currentUser && this.userData) {
                     this.users[this.currentUser] = this.userData;
-                    localStorage.setItem('tn_accounts', JSON.stringify(this.users));
+                    localStorage.setItem('tn_accounts_v4', JSON.stringify(this.users));
                 }
             }
 
-            setTheme(themeName) {
-                document.body.className = `${themeName} flex flex-col min-h-screen relative`;
-                if (this.userData) {
-                    this.userData.theme = themeName;
-                    this.saveDB();
-                }
+            setTheme(t) {
+                document.body.className = `${t} flex flex-col min-h-screen relative`;
+                if (this.userData) { this.userData.theme = t; this.saveDB(); }
             }
 
-            updateGlobalHUD() {
-                if(!this.userData) return;
+            updateHUD() {
+                if (!this.userData) return;
                 document.getElementById('coinCountDisplay').innerText = this.userData.coins;
                 document.getElementById('shopCoinDisplay').innerText = this.userData.coins;
                 document.getElementById('statHighScore').innerText = this.userData.highScore;
                 document.getElementById('activeAvatarIcon').innerText = this.userData.activeAvatar;
-                
-                document.getElementById('puShieldCount').innerText = this.userData.powerUps.shield;
-                document.getElementById('puFreezeCount').innerText = this.userData.powerUps.freeze;
             }
 
-            // --- UI NAVIGATIE ---
             showHome() {
-                this.stopGameLoop();
+                this.stopGameEngine();
                 document.getElementById('homeScreen').classList.remove('hidden');
                 document.getElementById('gameScreen').classList.add('hidden');
                 document.getElementById('resultScreen').classList.add('hidden');
                 document.getElementById('shopScreen').classList.add('hidden');
-                this.updateGlobalHUD();
+                this.updateHUD();
             }
 
             showShop() {
-                this.stopGameLoop();
+                this.stopGameEngine();
                 document.getElementById('homeScreen').classList.add('hidden');
                 document.getElementById('shopScreen').classList.remove('hidden');
                 this.renderShop();
             }
-            
+
             toggleSettingsModal(show) {
-                const m = document.getElementById('settingsModal');
-                if(show) m.classList.remove('hidden'); else m.classList.add('hidden');
+                document.getElementById('settingsModal').classList.toggle('hidden', !show);
             }
 
-            // --- GAME START & MODES ---
             startMode(modeType) {
                 this.mode = modeType;
-                // Shuffle questions
                 this.questions = [...gameQuestions].sort(() => Math.random() - 0.5);
                 this.qIndex = 0;
                 this.score = 0;
-                this.activeShield = false;
-                this.bossHp = 100;
-                
+                this.hearts = (modeType === 'practice') ? 999 : 3;
+
                 document.getElementById('homeScreen').classList.add('hidden');
                 document.getElementById('gameScreen').classList.remove('hidden');
                 document.getElementById('gameScreen').classList.add('flex');
-                
-                // Configureer levens op basis van mode
-                this.hearts = (modeType === 'practice') ? 999 : 3;
 
-                // UI voor Boss/Powerups
-                document.getElementById('bossHpContainer').classList.toggle('hidden', modeType !== 'boss');
-                document.getElementById('powerupBar').classList.toggle('hidden', modeType === 'practice');
-                
-                // Configureer Arena vs Practice view
-                const arena = document.getElementById('actionArena');
-                const pArena = document.getElementById('practiceArena');
-                const ninja = document.getElementById('ninjaPlayer');
-                
+                const modeBadges = { archer: '🎯 Ninja Shuriken', slasher: '⚔️️ Word Slasher', maze: '🗺️ Ninja Doolhof', practice: '📖 Oefenstudio' };
+                document.getElementById('gameModeBadge').innerText = modeBadges[modeType];
+
+                const canvasContainer = document.getElementById('canvasContainer');
+                const practiceArena = document.getElementById('practiceArena');
+                const controlsOverlay = document.getElementById('controlsOverlay');
+                const dpadControls = document.getElementById('dpadControls');
+                const mazeInteractContainer = document.getElementById('mazeInteractContainer');
+
                 if (modeType === 'practice') {
-                    arena.classList.add('hidden');
-                    pArena.classList.remove('hidden');
+                    canvasContainer.classList.add('hidden');
+                    practiceArena.classList.remove('hidden');
+                    controlsOverlay.classList.add('hidden');
                 } else {
-                    arena.classList.remove('hidden');
-                    pArena.classList.add('hidden');
-                    ninja.innerText = this.userData.activeAvatar;
-                    
-                    // Plaats Ninja correct afhankelijk van mode
-                    if (modeType === 'blitz') {
-                        // Ninja staat onderaan
-                        ninja.style.top = '85%'; 
-                        ninja.style.left = '50%';
-                    } else {
-                        // Arcade / Boss: Ninja staat in het midden
-                        ninja.style.top = '50%';
-                        ninja.style.left = '50%';
-                    }
+                    canvasContainer.classList.remove('hidden');
+                    practiceArena.classList.add('hidden');
+                    controlsOverlay.classList.remove('hidden');
+
+                    dpadControls.classList.toggle('hidden', modeType !== 'maze');
+                    mazeInteractContainer.classList.toggle('hidden', modeType !== 'maze');
+
+                    this.canvas = document.getElementById('gameCanvas');
+                    this.ctx = this.canvas.getContext('2d');
+                    this.resizeCanvas();
                 }
 
                 this.renderHearts();
@@ -715,25 +595,48 @@
             renderHearts() {
                 const c = document.getElementById('heartsContainer');
                 if (this.mode === 'practice') {
-                    c.innerHTML = '<span class="text-sm font-black text-emerald-600 bg-emerald-100 px-2 py-1 rounded-md">Geen tijdslimiet</span>';
+                    c.innerHTML = '<span class="text-xs font-black text-emerald-600 bg-emerald-100 px-2 py-1 rounded-md">Geen tijdslimiet</span>';
                     return;
                 }
                 let h = '';
-                for(let i=0; i<3; i++) {
-                    if (i < this.hearts) h += `<span class="text-xl drop-shadow-md">❤️</span>`;
-                    else h += '<span class="text-xl opacity-30 grayscale">💔</span>';
+                for (let i = 0; i < 3; i++) {
+                    h += (i < this.hearts) ? '❤️' : '<span class="opacity-30 grayscale">💔</span>';
                 }
-                if(this.activeShield) h += '<span class="text-xl ml-2 drop-shadow-[0_0_8px_#6366f1]">🛡️</span>';
                 c.innerHTML = h;
             }
 
+            prepareQuestionOptions(q) {
+                // Maak een optie-object met tekst en correctheidsindicator
+                const correctText = q.options[q.correct];
+                let opts = q.options.map((optText, idx) => ({
+                    text: optText,
+                    isCorrect: (idx === q.correct)
+                }));
+
+                // Hussel de antwoorden willekeurig (Fisher-Yates shuffle)
+                for (let i = opts.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [opts[i], opts[j]] = [opts[j], opts[i]];
+                }
+
+                // Garantiecontrole: controleer of het juiste antwoord er altijd tussen staat
+                if (!opts.some(o => o.isCorrect)) {
+                    opts[0] = { text: correctText, isCorrect: true };
+                }
+
+                return opts;
+            }
+
             loadQuestion() {
-                if (this.qIndex >= this.questions.length || this.hearts <= 0 || (this.mode === 'boss' && this.bossHp <= 0)) {
+                if (this.qIndex >= this.questions.length || this.hearts <= 0) {
                     this.finishGame();
                     return;
                 }
 
                 const q = this.questions[this.qIndex];
+                // Genereer willekeurig geschudde opties voor deze vraag
+                this.currentOpts = this.prepareQuestionOptions(q);
+
                 document.getElementById('questionTag').innerText = q.tag;
                 document.getElementById('questionText').innerHTML = q.q.replace(/\*\*(.*?)\*\*/g, '<span class="text-amber-500 font-extrabold underline">$1</span>');
                 document.getElementById('feedbackBox').classList.add('hidden');
@@ -742,254 +645,447 @@
                 if (this.mode === 'practice') {
                     this.renderPracticeOptions(q);
                 } else {
-                    this.spawnActionEnemies(q);
-                    this.startGameLoop();
+                    this.initCanvasEngine(q);
                 }
             }
 
-            // --- OEFENMODUS (STATISCH) ---
             renderPracticeOptions(q) {
                 const container = document.getElementById('practiceArena');
                 container.innerHTML = '';
-                q.options.forEach((opt, idx) => {
+                this.currentOpts.forEach((optObj) => {
                     const btn = document.createElement('button');
-                    // Grijze, anonieme stijl in het begin
-                    btn.className = 'w-full px-6 py-4 bg-slate-100 border-2 border-slate-300 text-slate-800 font-bold rounded-2xl text-left btn-hover shadow-sm flex items-center gap-3';
-                    btn.innerHTML = `<span class="text-2xl opacity-50">⚪</span> <span class="text-lg">${opt}</span>`;
+                    btn.className = 'w-full px-5 py-3.5 anonymous-option text-left font-bold text-sm sm:text-base flex items-center gap-3 btn-hover';
+                    btn.innerHTML = `<span class="text-xl opacity-60">⚪</span> <span>${optObj.text}</span>`;
                     
                     btn.onclick = () => {
-                        // Schakel alle knoppen uit na 1 klik
                         Array.from(container.children).forEach(b => b.disabled = true);
-                        const isCorrect = (idx === q.correct);
-                        
+                        const isCorrect = optObj.isCorrect;
                         if (isCorrect) {
-                            btn.className = 'w-full px-6 py-4 bg-emerald-100 border-2 border-emerald-500 text-emerald-900 font-bold rounded-2xl text-left shadow-sm flex items-center gap-3';
-                            btn.innerHTML = `<span class="text-2xl">✅</span> <span class="text-lg">${opt}</span>`;
+                            btn.className = 'w-full px-5 py-3.5 bg-emerald-600 text-white font-bold rounded-xl text-left border-2 border-emerald-400 flex items-center gap-3';
+                            btn.innerHTML = `<span class="text-xl">✅</span> <span>${optObj.text}</span>`;
                             this.playSfx(1046, 0.2);
                         } else {
-                            btn.className = 'w-full px-6 py-4 bg-rose-100 border-2 border-rose-500 text-rose-900 font-bold rounded-2xl text-left shadow-sm flex items-center gap-3';
-                            btn.innerHTML = `<span class="text-2xl">❌</span> <span class="text-lg text-rose-900 line-through">${opt}</span>`;
+                            btn.className = 'w-full px-5 py-3.5 bg-rose-600 text-white font-bold rounded-xl text-left border-2 border-rose-400 flex items-center gap-3';
+                            btn.innerHTML = `<span class="text-xl">❌</span> <span class="line-through">${optObj.text}</span>`;
                             this.playSfx(150, 0.3);
                         }
-                        
-                        // Toon feedback
                         setTimeout(() => this.showFeedback(isCorrect, q.exp), 600);
                     };
                     container.appendChild(btn);
                 });
             }
 
-            // --- ACTIEMODI (ENGINE) ---
-            spawnActionEnemies(q) {
-                const arena = document.getElementById('actionArena');
-                this.enemies.forEach(e => e.el.remove());
-                this.enemies = [];
-                arena.classList.remove('frozen-arena');
-                document.getElementById('ninjaPlayer').classList.remove('player-hit');
-
-                q.options.forEach((opt, idx) => {
-                    const el = document.createElement('div');
-                    const isCorrect = (idx === q.correct);
-                    
-                    // CRITIEK: Vijanden zien er visueel EXACT HETZELFDE uit (fout/goed lek is gedicht!)
-                    el.className = `enemy-card px-3 py-2 bg-slate-800 text-white font-extrabold rounded-xl shadow-xl border-b-4 border-slate-600 flex items-center gap-2 cursor-crosshair`;
-                    el.innerHTML = `<span class="text-xl">👹</span> <span class="text-sm pointer-events-none">${opt}</span>`;
-
-                    let startX, startY;
-
-                    if (this.mode === 'blitz') {
-                        // Vallen van boven: y=0, x is verdeeld over breedte
-                        startX = 10 + (80 / q.options.length) * idx + (Math.random() * 5); 
-                        startY = -10 - (Math.random() * 10);
-                    } else {
-                        // Arcade/Boss: Komen uit een cirkel van de rand
-                        const angle = Math.random() * Math.PI * 2;
-                        const dist = 65; 
-                        startX = 50 + Math.cos(angle) * dist;
-                        startY = 50 + Math.sin(angle) * dist;
-                    }
-
-                    el.style.left = `${startX}%`;
-                    el.style.top = `${startY}%`;
-
-                    // Klik event
-                    el.onmousedown = (e) => this.slashEnemy(isCorrect, el, e);
-                    el.ontouchstart = (e) => { e.preventDefault(); this.slashEnemy(isCorrect, el, e.touches[0]); };
-
-                    arena.appendChild(el);
-                    this.enemies.push({ el, x: startX, y: startY, isCorrect });
-                });
+            resizeCanvas() {
+                if (!this.canvas) return;
+                const rect = this.canvas.parentElement.getBoundingClientRect();
+                this.canvas.width = rect.width;
+                this.canvas.height = rect.height;
             }
 
-            startGameLoop() {
-                if(this.animationFrame) cancelAnimationFrame(this.animationFrame);
+            initCanvasEngine(q) {
+                this.stopGameEngine();
                 this.isPlaying = true;
+
+                if (this.mode === 'archer') {
+                    // NINJA SHURIKEN DOELSCHIETEN
+                    const h = this.canvas.height;
+                    const count = this.currentOpts.length;
+                    const spacing = (h - 60) / count;
+
+                    this.archerState = {
+                        shuriken: null,
+                        targets: this.currentOpts.map((optObj, idx) => ({
+                            x: this.canvas.width - 130,
+                            y: 40 + idx * spacing + spacing / 2,
+                            optText: optObj.text,
+                            isCorrect: optObj.isCorrect
+                        }))
+                    };
+
+                    this.canvas.onmousedown = (e) => this.handleArcherClick(e);
+                    this.canvas.ontouchstart = (e) => { e.preventDefault(); this.handleArcherClick(e.touches[0]); };
+
+                } else if (this.mode === 'slasher') {
+                    // WORD SLASHER MET 3 SECONDE COUNTDOWN
+                    const w = this.canvas.width;
+                    const h = this.canvas.height;
+                    const count = this.currentOpts.length;
+
+                    this.slasherState = {
+                        countdown: 3.0, // 3 seconden leestijd vooraf
+                        items: this.currentOpts.map((optObj, idx) => ({
+                            x: (w / (count + 1)) * (idx + 1),
+                            y: h + 30,
+                            vx: (Math.random() - 0.5) * 30,
+                            vy: -(190 + Math.random() * 40),
+                            optText: optObj.text,
+                            isCorrect: optObj.isCorrect,
+                            sliced: false
+                        }))
+                    };
+
+                    this.canvas.onmousedown = (e) => this.handleSlasherClick(e);
+                    this.canvas.ontouchstart = (e) => { e.preventDefault(); this.handleSlasherClick(e.touches[0]); };
+
+                } else if (this.mode === 'maze') {
+                    // NINJA DOOLHOF
+                    this.mazeState = {
+                        px: 1, py: 1,
+                        grid: [
+                            [1,1,1,1,1,1,1,1,1],
+                            [1,0,0,0,1,0,0,0,1],
+                            [1,0,1,0,1,0,1,0,1],
+                            [1,0,1,0,0,0,1,0,1],
+                            [1,0,1,1,1,0,1,0,1],
+                            [1,0,0,0,0,0,0,0,1],
+                            [1,1,1,1,1,1,1,1,1]
+                        ],
+                        items: this.currentOpts.map((optObj, idx) => {
+                            const coords = [[1,5], [7,1], [7,5], [3,3]];
+                            return { x: coords[idx][0], y: coords[idx][1], optText: optObj.text, isCorrect: optObj.isCorrect };
+                        }),
+                        ghosts: [ { x: 5, y: 1, dir: 1 }, { x: 3, y: 5, dir: -1 } ]
+                    };
+                }
+
                 this.lastTime = performance.now();
-                this.animationFrame = requestAnimationFrame(this.gameLoop.bind(this));
+                this.animId = requestAnimationFrame(this.gameLoop.bind(this));
             }
 
-            stopGameLoop() {
+            stopGameEngine() {
                 this.isPlaying = false;
-                if(this.animationFrame) cancelAnimationFrame(this.animationFrame);
+                if (this.animId) cancelAnimationFrame(this.animId);
+                if (this.canvas) {
+                    this.canvas.onmousedown = null;
+                    this.canvas.ontouchstart = null;
+                }
             }
 
             gameLoop(timestamp) {
                 if (!this.isPlaying) return;
-                const dt = (timestamp - this.lastTime) / 1000;
+                const dt = Math.min((timestamp - this.lastTime) / 1000, 0.1);
                 this.lastTime = timestamp;
 
-                if (!this.isFrozen) this.updateEnemies(dt);
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-                this.animationFrame = requestAnimationFrame(this.gameLoop.bind(this));
+                if (this.mode === 'archer') this.updateArcher(dt);
+                else if (this.mode === 'slasher') this.updateSlasher(dt);
+                else if (this.mode === 'maze') this.updateMaze(dt);
+
+                this.animId = requestAnimationFrame(this.gameLoop.bind(this));
             }
 
-            updateEnemies(dt) {
-                const speed = 7 + (this.qIndex * 0.5); // Snelheid neemt toe
+            // --- GAME 1: NINJA SHURIKEN DOELSCHIETEN LOGICA ---
+            updateArcher(dt) {
+                const ctx = this.ctx;
+                const w = this.canvas.width;
+                const h = this.canvas.height;
 
-                for (let i = this.enemies.length - 1; i >= 0; i--) {
-                    const enemy = this.enemies[i];
-                    
-                    if (this.mode === 'blitz') {
-                        // Val naar beneden. Speler is op y=85%
-                        enemy.y += speed * dt * 2.5; // Val snelheid
-                        if (enemy.y > 80 && enemy.y < 90 && Math.abs(enemy.x - 50) < 30) {
-                            // Geraakt door grond/ninja radius
-                            this.enemyImpact(enemy);
-                        } else if (enemy.y > 100) {
-                            // Gemist (van scherm gevallen)
-                            if (enemy.isCorrect) this.enemyImpact(enemy); 
-                        }
-                    } else {
-                        // Arcade / Boss: Beweeg naar midden (50, 50)
-                        const dx = 50 - enemy.x;
-                        const dy = 50 - enemy.y;
-                        const dist = Math.sqrt(dx*dx + dy*dy);
+                // Achtergrond
+                ctx.fillStyle = '#1e293b'; ctx.fillRect(0, 0, w, h);
 
-                        if (dist < 5) {
-                            this.enemyImpact(enemy);
-                        } else {
-                            enemy.x += (dx / dist) * speed * dt;
-                            enemy.y += (dy / dist) * speed * dt;
-                        }
-                    }
-                    
-                    // Pas visueel toe
-                    enemy.el.style.left = `${enemy.x}%`;
-                    enemy.el.style.top = `${enemy.y}%`;
-                }
-            }
+                // Teken Ninja links
+                ctx.font = '45px Outfit';
+                ctx.textAlign = 'center';
+                ctx.fillText(this.userData.activeAvatar, 50, h / 2 + 15);
 
-            enemyImpact(enemy) {
-                if (enemy.isCorrect) {
-                    this.handleDamage(enemy.el, "Je hebt het juiste antwoord niet op tijd gered!");
-                } else {
-                    this.handleDamage(enemy.el, "Geraakt door een fout antwoord!");
-                }
-            }
+                const st = this.archerState;
 
-            slashEnemy(isCorrect, element, event) {
-                if (!this.isPlaying) return;
+                // Teken Doelen (Schatkisten/Schietborden)
+                st.targets.forEach((tgt, idx) => {
+                    ctx.fillStyle = '#334155';
+                    ctx.strokeStyle = '#f59e0b';
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+                    ctx.roundRect(tgt.x - 60, tgt.y - 25, 120, 50, 10);
+                    ctx.fill();
+                    ctx.stroke();
 
-                // Slash visual effect
-                const rect = document.getElementById('actionArena').getBoundingClientRect();
-                const clickX = ((event.clientX || event.pageX) - rect.left) / rect.width * 100;
-                const clickY = ((event.clientY || event.pageY) - rect.top) / rect.height * 100;
-                
-                const slash = document.createElement('div');
-                slash.className = 'slash-anim';
-                slash.style.left = `${clickX}%`; slash.style.top = `${clickY}%`;
-                slash.style.setProperty('--rot', `${Math.random() * 360}deg`);
-                document.getElementById('actionArena').appendChild(slash);
-                setTimeout(() => slash.remove(), 300);
-
-                if (isCorrect) {
-                    this.playSfx(1046, 0.2); // Succes geluid
-                    this.stopGameLoop();
-                    
-                    // Visuele reveal van goed antwoord
-                    element.classList.replace('bg-slate-800', 'bg-emerald-500');
-                    element.classList.replace('border-slate-600', 'border-emerald-700');
-                    element.innerHTML = element.innerHTML.replace('👹', '✅');
-
-                    this.score += 100;
-                    if (this.mode === 'boss') {
-                        this.bossHp -= 25;
-                        document.getElementById('bossHpBar').style.width = `${this.bossHp}%`;
-                        document.getElementById('bossHpText').innerText = `${this.bossHp} / 100 HP`;
-                    }
-                    document.getElementById('currentScore').innerText = this.score;
-
-                    // Laat rest verdwijnen
-                    this.enemies.forEach(e => {
-                        if(e.el !== element) { e.el.style.transform = 'scale(0)'; e.el.style.opacity = '0'; }
-                    });
-
-                    setTimeout(() => this.showFeedback(true, this.questions[this.qIndex].exp), 500);
-                } else {
-                    // Visuele reveal van fout antwoord
-                    element.classList.replace('bg-slate-800', 'bg-rose-600');
-                    element.classList.replace('border-slate-600', 'border-rose-800');
-                    element.innerHTML = element.innerHTML.replace('👹', '❌');
-                    
-                    this.handleDamage(element, "Oeps, foute aanval!");
-                }
-            }
-
-            handleDamage(element, reason) {
-                this.playSfx(150, 0.3);
-                
-                if (this.activeShield) {
-                    this.activeShield = false;
-                    element.remove();
-                    this.enemies = this.enemies.filter(e => e.el !== element);
-                    this.renderHearts();
-                    return; // Spel gaat door
-                }
-
-                this.stopGameLoop();
-                element.style.filter = 'drop-shadow(0 0 20px red)';
-                document.getElementById('ninjaPlayer').classList.add('player-hit');
-                
-                this.hearts--;
-                this.renderHearts();
-                
-                // Laat zien welk antwoord het wel was
-                const correctEnemies = this.enemies.filter(e => e.isCorrect);
-                correctEnemies.forEach(e => {
-                    e.el.classList.replace('bg-slate-800', 'bg-emerald-500');
-                    e.el.innerHTML = e.el.innerHTML.replace('👹', '✅');
+                    // Bord tekst
+                    ctx.fillStyle = '#ffffff';
+                    ctx.font = 'bold 14px Outfit';
+                    ctx.fillText(tgt.optText, tgt.x, tgt.y + 5);
                 });
 
-                setTimeout(() => this.showFeedback(false, `${reason} ${this.questions[this.qIndex].exp}`), 800);
-            }
+                // Vliegende Shuriken Animation
+                if (st.shuriken) {
+                    const sh = st.shuriken;
+                    sh.x += sh.vx * dt;
+                    sh.y += sh.vy * dt;
+                    sh.rot += 15 * dt;
 
-            usePowerUp(type) {
-                if (this.userData.powerUps[type] <= 0 || !this.isPlaying) return;
+                    ctx.save();
+                    ctx.translate(sh.x, sh.y);
+                    ctx.rotate(sh.rot);
+                    ctx.font = '28px Outfit';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('🥷', 0, 8);
+                    ctx.restore();
 
-                if (type === 'shield' && !this.activeShield) {
-                    this.activeShield = true;
-                    this.userData.powerUps.shield--;
-                    this.renderHearts();
-                } else if (type === 'freeze' && !this.isFrozen) {
-                    this.isFrozen = true;
-                    this.userData.powerUps.freeze--;
-                    document.getElementById('actionArena').classList.add('frozen-arena');
-                    setTimeout(() => { 
-                        this.isFrozen = false; 
-                        document.getElementById('actionArena').classList.remove('frozen-arena');
-                    }, 4000);
+                    // Raakt doel?
+                    const dist = Math.hypot(sh.x - sh.targetObj.x, sh.y - sh.targetObj.y);
+                    if (dist < 35) {
+                        const tgt = sh.targetObj;
+                        st.shuriken = null;
+                        this.stopGameEngine();
+
+                        if (tgt.isCorrect) {
+                            this.playSfx(1046, 0.2);
+                            this.score += 100;
+                            this.showFeedback(true, this.questions[this.qIndex].exp);
+                        } else {
+                            this.playSfx(150, 0.3);
+                            this.hearts--;
+                            this.renderHearts();
+                            this.showFeedback(false, `Mismaakt! Verkeerd doel geraakt. ${this.questions[this.qIndex].exp}`);
+                        }
+                    }
                 }
-                
-                this.saveDB();
-                this.updateGlobalHUD();
             }
 
-            // --- FEEDBACK & AFHANDELING ---
+            handleArcherClick(e) {
+                if (this.mode !== 'archer' || !this.isPlaying || this.archerState.shuriken) return;
+                const rect = this.canvas.getBoundingClientRect();
+                const clickX = e.clientX - rect.left;
+                const clickY = e.clientY - rect.top;
+
+                // Klik je op een doel?
+                this.archerState.targets.forEach(tgt => {
+                    if (clickX > tgt.x - 70 && clickX < tgt.x + 70 && clickY > tgt.y - 30 && clickY < tgt.y + 30) {
+                        const startX = 60;
+                        const startY = this.canvas.height / 2;
+                        const dx = tgt.x - startX;
+                        const dy = tgt.y - startY;
+                        const angle = Math.atan2(dy, dx);
+                        const speed = 700;
+
+                        this.archerState.shuriken = {
+                            x: startX, y: startY,
+                            vx: Math.cos(angle) * speed,
+                            vy: Math.sin(angle) * speed,
+                            rot: 0,
+                            targetObj: tgt
+                        };
+                        this.playSfx(600, 0.08);
+                    }
+                });
+            }
+
+            // --- GAME 2: WORD SLASHER LOGICA (TRAGER & SLOWER) ---
+            updateSlasher(dt) {
+                const ctx = this.ctx;
+                const w = this.canvas.width;
+                const h = this.canvas.height;
+
+                ctx.fillStyle = '#0f172a'; ctx.fillRect(0, 0, w, h);
+
+                const st = this.slasherState;
+
+                // 3 Seconden Countdown scherm
+                if (st.countdown > 0) {
+                    st.countdown -= dt;
+                    const countNum = Math.ceil(st.countdown);
+
+                    ctx.fillStyle = '#f59e0b';
+                    ctx.font = '900 64px Outfit';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(countNum > 0 ? countNum : 'KLAAR!', w / 2, h / 2 - 10);
+
+                    ctx.fillStyle = '#94a3b8';
+                    ctx.font = 'bold 16px Outfit';
+                    ctx.fillText('📖 Lees de vraag hierboven! Woorden vliegen zo omhoog...', w / 2, h / 2 + 40);
+                    return;
+                }
+
+                const gravity = 90;
+                let activeCount = 0;
+
+                st.items.forEach(it => {
+                    if (it.sliced) return;
+
+                    it.x += it.vx * dt;
+                    it.y += it.vy * dt;
+                    it.vy += gravity * dt;
+
+                    if (it.y < h + 60) activeCount++;
+
+                    // Teken Vliegend Woord
+                    ctx.save();
+                    ctx.translate(it.x, it.y);
+                    ctx.fillStyle = '#1e293b';
+                    ctx.strokeStyle = '#64748b';
+                    ctx.lineWidth = 3;
+                    ctx.beginPath(); ctx.roundRect(-60, -22, 120, 44, 12); ctx.fill(); ctx.stroke();
+
+                    ctx.fillStyle = '#ffffff';
+                    ctx.font = 'bold 13px Outfit';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(it.optText, 0, 4);
+                    ctx.restore();
+                });
+
+                if (activeCount === 0 && this.isPlaying) {
+                    this.stopGameEngine();
+                    this.hearts--;
+                    this.renderHearts();
+                    this.playSfx(150, 0.3);
+                    this.showFeedback(false, `Gemist! Het juiste antwoord vloog voorbij. ${this.questions[this.qIndex].exp}`);
+                }
+            }
+
+            handleSlasherClick(e) {
+                if (this.mode !== 'slasher' || !this.isPlaying) return;
+                const rect = this.canvas.getBoundingClientRect();
+                const clickX = e.clientX - rect.left;
+                const clickY = e.clientY - rect.top;
+
+                this.slasherState.items.forEach(it => {
+                    if (it.sliced) return;
+                    const dist = Math.hypot(it.x - clickX, it.y - clickY);
+                    if (dist < 50) {
+                        it.sliced = true;
+                        this.stopGameEngine();
+
+                        if (it.isCorrect) {
+                            this.playSfx(1046, 0.2);
+                            this.score += 100;
+                            this.showFeedback(true, this.questions[this.qIndex].exp);
+                        } else {
+                            this.playSfx(150, 0.3);
+                            this.hearts--;
+                            this.renderHearts();
+                            this.showFeedback(false, `Oeps, verkeerde hak-aanval! ${this.questions[this.qIndex].exp}`);
+                        }
+                    }
+                });
+            }
+
+            // --- GAME 3: DOOLHOF LOGICA (MET HANDMATIGE PAK-OP) ---
+            updateMaze(dt) {
+                const ctx = this.ctx;
+                const w = this.canvas.width;
+                const h = this.canvas.height;
+
+                ctx.fillStyle = '#090d16'; ctx.fillRect(0, 0, w, h);
+
+                const st = this.mazeState;
+                const cols = st.grid[0].length;
+                const rows = st.grid.length;
+                const cellW = w / cols;
+                const cellH = h / rows;
+
+                // Grid Muren
+                for (let r = 0; r < rows; r++) {
+                    for (let c = 0; c < cols; c++) {
+                        if (st.grid[r][c] === 1) {
+                            ctx.fillStyle = '#1e293b';
+                            ctx.fillRect(c * cellW, r * cellH, cellW, cellH);
+                            ctx.strokeStyle = '#334155';
+                            ctx.strokeRect(c * cellW, r * cellH, cellW, cellH);
+                        }
+                    }
+                }
+
+                // Item schatkisten
+                let standingOnItem = false;
+                st.items.forEach(it => {
+                    const isNear = (st.px === it.x && st.py === it.y);
+                    if (isNear) standingOnItem = true;
+
+                    ctx.fillStyle = isNear ? '#f59e0b' : '#334155';
+                    ctx.strokeStyle = isNear ? '#ffffff' : '#475569';
+                    ctx.lineWidth = 2;
+                    ctx.fillRect(it.x * cellW + 4, it.y * cellH + 4, cellW - 8, cellH - 8);
+                    ctx.strokeRect(it.x * cellW + 4, it.y * cellH + 4, cellW - 8, cellH - 8);
+
+                    ctx.fillStyle = '#ffffff';
+                    ctx.font = 'bold 11px Outfit';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(it.optText, (it.x + 0.5) * cellW, (it.y + 0.55) * cellH);
+                });
+
+                // Tip tonen als je op een schat staat
+                if (standingOnItem) {
+                    ctx.fillStyle = '#f59e0b';
+                    ctx.font = 'bold 14px Outfit';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('Druk op [PAK OP] om te antwoorden!', w / 2, 25);
+                }
+
+                // Spoken (Obstakels)
+                st.ghosts.forEach(g => {
+                    g.x += g.dir * dt * 1.3;
+                    if (g.x > 7 || g.x < 1) g.dir *= -1;
+
+                    ctx.font = '22px Outfit';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('👻', (g.x + 0.5) * cellW, (g.y + 0.65) * cellH);
+
+                    if (Math.hypot(g.x - st.px, g.y - st.py) < 0.6) {
+                        this.stopGameEngine();
+                        this.playSfx(150, 0.3);
+                        this.hearts--;
+                        this.renderHearts();
+                        this.showFeedback(false, `Geraakt door een spook! Blijf uit hun buurt.`);
+                    }
+                });
+
+                // Ninja Speler
+                ctx.font = '26px Outfit';
+                ctx.textAlign = 'center';
+                ctx.fillText(this.userData.activeAvatar, (st.px + 0.5) * cellW, (st.py + 0.65) * cellH);
+            }
+
+            mazePickUp() {
+                if (this.mode !== 'maze' || !this.isPlaying) return;
+                const st = this.mazeState;
+                const foundItem = st.items.find(it => it.x === st.px && it.y === st.py);
+
+                if (foundItem) {
+                    this.stopGameEngine();
+                    if (foundItem.isCorrect) {
+                        this.playSfx(1046, 0.2);
+                        this.score += 100;
+                        this.showFeedback(true, this.questions[this.qIndex].exp);
+                    } else {
+                        this.playSfx(150, 0.3);
+                        this.hearts--;
+                        this.renderHearts();
+                        this.showFeedback(false, `Verkeerde schat gekozen! ${this.questions[this.qIndex].exp}`);
+                    }
+                }
+            }
+
+            handleDirInput(dir) {
+                if (this.mode !== 'maze' || !this.isPlaying) return;
+                const st = this.mazeState;
+                let nx = st.px, ny = st.py;
+
+                if (dir === 'up') ny--;
+                if (dir === 'down') ny++;
+                if (dir === 'left') nx--;
+                if (dir === 'right') nx++;
+
+                if (st.grid[ny] && st.grid[ny][nx] === 0) {
+                    st.px = nx; st.py = ny;
+                }
+            }
+
+            setupKeyboardListeners() {
+                window.onkeydown = (e) => {
+                    if (e.key === 'ArrowUp' || e.key === 'w') this.handleDirInput('up');
+                    if (e.key === 'ArrowDown' || e.key === 's') this.handleDirInput('down');
+                    if (e.key === 'ArrowLeft' || e.key === 'a') this.handleDirInput('left');
+                    if (e.key === 'ArrowRight' || e.key === 'd') this.handleDirInput('right');
+                    if (e.key === 'e' || e.key === ' ') this.mazePickUp();
+                };
+            }
+
             showFeedback(isCorrect, text) {
                 const box = document.getElementById('feedbackBox');
                 document.getElementById('feedbackIcon').innerText = isCorrect ? '🎉' : '💀';
-                document.getElementById('feedbackTitle').innerText = isCorrect ? 'Goed gedaan!' : 'Oef...';
-                document.getElementById('feedbackTitle').className = `font-black text-2xl sm:text-3xl mb-2 ${isCorrect ? 'text-emerald-600' : 'text-rose-600'}`;
+                document.getElementById('feedbackTitle').innerText = isCorrect ? 'Goed gedaan!' : 'Helaas!';
+                document.getElementById('feedbackTitle').className = `font-black text-2xl sm:text-3xl mb-1 ${isCorrect ? 'text-emerald-600' : 'text-rose-600'}`;
                 document.getElementById('feedbackText').innerText = text;
                 box.classList.remove('hidden');
             }
@@ -1000,28 +1096,22 @@
             }
 
             finishGame() {
-                this.stopGameLoop();
+                this.stopGameEngine();
                 document.getElementById('gameScreen').classList.add('hidden');
-                document.getElementById('gameScreen').classList.remove('flex');
                 document.getElementById('resultScreen').classList.remove('hidden');
 
-                // Punten berekening (Oefenmodus geeft minder munten)
-                let multiplier = this.mode === 'practice' ? 0.2 : 0.1;
-                const earnedCoins = Math.floor(this.score * multiplier) + (this.mode === 'boss' && this.bossHp <= 0 ? 50 : 0);
-                
-                this.userData.coins += earnedCoins;
+                const coinsEarned = Math.floor(this.score * 0.15);
+                this.userData.coins += coinsEarned;
                 if (this.score > this.userData.highScore && this.mode !== 'practice') {
                     this.userData.highScore = this.score;
                 }
-                
+
                 this.saveDB();
-                
                 document.getElementById('resScore').innerText = this.score;
-                document.getElementById('resCoins').innerText = `+${earnedCoins} 🪙`;
-                this.updateGlobalHUD();
+                document.getElementById('resCoins').innerText = `+${coinsEarned} 🪙`;
+                this.updateHUD();
             }
 
-            // --- SHOP ---
             renderShop() {
                 const grid = document.getElementById('avatarShopGrid');
                 grid.innerHTML = avatarCatalog.map(av => {
@@ -1036,8 +1126,8 @@
                                     ${isSelected ? 'Actief' : 'Kiezen'}
                                 </button>
                             ` : `
-                                <button onclick="app.buyAvatar('${av.id}', ${av.price}, '${av.icon}')" class="px-2 py-1 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs w-full flex justify-center gap-1">
-                                    <span>${av.price}</span><span>🪙</span>
+                                <button onclick="app.buyAvatar('${av.id}', ${av.price}, '${av.icon}')" class="px-2 py-1 bg-amber-500 text-white rounded-lg text-xs w-full">
+                                    ${av.price} 🪙
                                 </button>
                             `}
                         </div>
@@ -1056,20 +1146,10 @@
             selectAvatar(icon) {
                 this.userData.activeAvatar = icon;
                 this.saveDB();
-                this.updateGlobalHUD();
+                this.updateHUD();
                 this.renderShop();
             }
 
-            buyPowerUp(type, price) {
-                if (this.userData.coins >= price) {
-                    this.userData.coins -= price;
-                    this.userData.powerUps[type]++;
-                    this.saveDB();
-                    this.updateGlobalHUD();
-                } else alert('Niet genoeg munten!');
-            }
-
-            // --- AUDIO Systeem ---
             playSfx(freq, duration = 0.15) {
                 try {
                     if (!this.audioCtx) this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
