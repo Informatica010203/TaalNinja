@@ -88,11 +88,23 @@
             display: block;
             touch-action: none;
         }
+
+        .anonymous-option {
+            background-color: #1e293b;
+            color: #ffffff;
+            border: 2px solid #475569;
+            border-radius: 0.85rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: transform 0.15s ease, background-color 0.2s ease;
+        }
+        .anonymous-option:hover {
+            background-color: #334155;
+            border-color: #64748b;
+        }
     </style>
 </head>
 <body class="theme-sunny flex flex-col min-h-screen relative">
 
-    <!-- LOGIN SCHERM -->
     <div id="loginScreen" class="absolute inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-md p-4">
         <div class="glass-card bg-white/95 max-w-sm w-full p-6 sm:p-8 rounded-3xl text-center space-y-5 shadow-2xl pop-in">
             <div class="text-5xl sm:text-6xl mb-1 floating">🥷</div>
@@ -135,7 +147,6 @@
         </div>
     </div>
 
-    <!-- MAIN HEADER -->
     <header id="mainHeader" class="hidden w-full max-w-5xl mx-auto px-4 py-4 flex justify-between items-center z-20">
         <div class="flex items-center space-x-3 cursor-pointer" onclick="app.showHome()">
             <div id="activeAvatarIcon" class="w-12 h-12 bg-gradient-to-tr from-amber-400 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg text-2xl font-black floating">
@@ -165,68 +176,18 @@
         </div>
     </header>
 
-    <!-- MAIN CONTAINER -->
     <main id="mainContainer" class="hidden w-full max-w-4xl mx-auto px-4 flex-grow flex flex-col justify-center py-2 z-10">
 
         <!-- HOOFDMENU -->
         <section id="homeScreen" class="pop-in space-y-6 my-auto">
-
-            <!-- MARKETING & SPELREGELS BLOK -->
-            <div class="glass-card p-6 sm:p-8 rounded-3xl relative overflow-hidden bg-gradient-to-br from-indigo-900/10 via-purple-600/10 to-amber-500/10 border-2 border-indigo-500/30 shadow-xl">
-                <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-                    <div class="space-y-3 text-center md:text-left max-w-xl">
-                        <span class="px-3 py-1 rounded-full bg-gradient-to-r from-amber-500 to-red-500 text-white font-extrabold text-[11px] uppercase tracking-wider shadow-sm">
-                            🔥 De Ultieme Taal-Challenge
-                        </span>
-                        <h2 class="text-3xl sm:text-4xl font-black tracking-tight">
-                            Word een meester in de <span class="bg-gradient-to-r from-indigo-600 to-pink-500 bg-clip-text text-transparent">Nederlandse Taal!</span>
-                        </h2>
-                        <p class="text-sm opacity-90 leading-relaxed font-medium">
-                            Stap in de dojo van <strong>TaalNinja</strong>! Scherp je taalgevoel aan, versla lastige spelling- en grammatica-uitdagingen en verzamel munten om exclusieve ninja-avatars en thema's te ontgrendelen.
-                        </p>
-                    </div>
-                    <div class="text-6xl sm:text-7xl floating hidden md:block">
-                        ⚔️
-                    </div>
+            <div class="glass-card p-6 sm:p-8 rounded-3xl text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="space-y-2">
+                    <span class="px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-700 font-bold text-xs uppercase tracking-wider">
+                        Geüpdatete Spelmechanieken
+                    </span>
+                    <h2 class="text-3xl sm:text-4xl font-black">Kies je mini-game!</h2>
+                    <p class="text-sm opacity-80 max-w-md">Duidelijke besturing, rustige snelheden & veilige doolhofbesturing!</p>
                 </div>
-
-                <!-- SPELREGELS -->
-                <div class="mt-6 pt-6 border-t border-indigo-500/20">
-                    <h3 class="text-xs font-black uppercase tracking-widest text-indigo-500 mb-3 text-center md:text-left flex items-center gap-2">
-                        <i class="fas fa-scroll"></i> Spelregels van de Dojo
-                    </h3>
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                        <div class="p-3 rounded-2xl bg-white/50 border border-white/60 shadow-sm flex items-start space-x-3">
-                            <span class="text-2xl">🎯</span>
-                            <div>
-                                <h4 class="font-extrabold text-xs">1. Kies je Modus</h4>
-                                <p class="text-[11px] opacity-75 leading-snug">Kies uit Doelschieten, Slasher, Doolhof of Rustig Oefenen.</p>
-                            </div>
-                        </div>
-
-                        <div class="p-3 rounded-2xl bg-white/50 border border-white/60 shadow-sm flex items-start space-x-3">
-                            <span class="text-2xl">❤️</span>
-                            <div>
-                                <h4 class="font-extrabold text-xs">2. Beantwoord Goed</h4>
-                                <p class="text-[11px] opacity-75 leading-snug">Je start met 3 levens. Elk fout antwoord kost je een hartje!</p>
-                            </div>
-                        </div>
-
-                        <div class="p-3 rounded-2xl bg-white/50 border border-white/60 shadow-sm flex items-start space-x-3">
-                            <span class="text-2xl">🪙</span>
-                            <div>
-                                <h4 class="font-extrabold text-xs">3. Verdien Beloningen</h4>
-                                <p class="text-[11px] opacity-75 leading-snug">Haal hoge scores, verdien goudmunten en koop nieuwe skins!</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Modus Selectie Header -->
-            <div class="flex items-center justify-between">
-                <h3 class="text-xl font-black">Kies je mini-game!</h3>
-                <span class="text-xs font-bold opacity-70">4 Unieke Spelmodi</span>
             </div>
 
             <!-- Modus Selectie Grid -->
@@ -244,7 +205,7 @@
                     </div>
                 </div>
 
-                <!-- GAME 2: WORD SLASHER -->
+                <!-- GAME 2: WORD SLASHER (RUSTIGER) -->
                 <div onclick="app.startMode('slasher')" class="glass-card p-6 rounded-2xl cursor-pointer btn-hover border-2 border-amber-500/30 hover:border-amber-500 flex flex-col justify-between group">
                     <div class="flex items-start justify-between">
                         <div class="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-600 flex items-center justify-center text-2xl font-black">⚔️</div>
@@ -256,7 +217,7 @@
                     </div>
                 </div>
 
-                <!-- GAME 3: DOOLHOF EXPLORER -->
+                <!-- GAME 3: DOOLHOF EXPLORER (MET INTERACTIE) -->
                 <div onclick="app.startMode('maze')" class="glass-card p-6 rounded-2xl cursor-pointer btn-hover border-2 border-rose-500/30 hover:border-rose-500 flex flex-col justify-between group">
                     <div class="flex items-start justify-between">
                         <div class="w-12 h-12 rounded-xl bg-rose-500/20 text-rose-600 flex items-center justify-center text-2xl font-black">🗺️</div>
@@ -290,7 +251,6 @@
             </div>
         </section>
 
-        <!-- GAME SCHERM -->
         <section id="gameScreen" class="hidden flex-col space-y-3 relative z-10">
             
             <!-- HUD Bar -->
@@ -417,7 +377,6 @@
         </div>
     </div>
 
-    <!-- GAME LOGICA SCRIPT -->
     <script>
         const gameQuestions = [
             { tag: 'Spelling (d/t/dt)', q: 'Hij ...... (beloven) mij altijd te helpen.', options: ['beloofd', 'belooft', 'beloofdt', 'beloof'], correct: 1, exp: 'Tegenwoordige tijd hij-vorm is altijd stam + t.' },
@@ -456,17 +415,18 @@
                 this.qIndex = 0;
                 this.score = 0;
                 this.hearts = 3;
-                this.currentOpts = [];
+                this.currentOpts = []; // Bevat geschudde antwoorden per vraag
 
                 this.canvas = null;
                 this.ctx = null;
                 this.animId = null;
                 this.isPlaying = false;
+                this.audioCtx = null;
 
-                // Game states
+                // Game specific states
                 this.archerState = { targets: [], shuriken: null };
                 this.slasherState = { items: [] };
-                this.mazeState = { px: 1, py: 1, grid: [], items: [] };
+                this.mazeState = { px: 1, py: 1, grid: [], items: [], ghosts: [] };
             }
 
             switchAuthTab(tab) {
@@ -560,25 +520,19 @@
 
             setTheme(t) {
                 document.body.className = `${t} flex flex-col min-h-screen relative`;
-                if (this.userData) {
-                    this.userData.theme = t;
-                    this.saveDB();
-                }
+                if (this.userData) { this.userData.theme = t; this.saveDB(); }
             }
 
             updateHUD() {
                 if (!this.userData) return;
                 document.getElementById('coinCountDisplay').innerText = this.userData.coins;
-                document.getElementById('statHighScore').innerText = this.userData.highScore || 0;
-                document.getElementById('activeAvatarIcon').innerText = this.userData.activeAvatar || '🥷';
-            }
-
-            toggleSettingsModal(show) {
-                document.getElementById('settingsModal').classList.toggle('hidden', !show);
+                document.getElementById('shopCoinDisplay').innerText = this.userData.coins;
+                document.getElementById('statHighScore').innerText = this.userData.highScore;
+                document.getElementById('activeAvatarIcon').innerText = this.userData.activeAvatar;
             }
 
             showHome() {
-                this.stopGame();
+                this.stopGameEngine();
                 document.getElementById('homeScreen').classList.remove('hidden');
                 document.getElementById('gameScreen').classList.add('hidden');
                 document.getElementById('resultScreen').classList.add('hidden');
@@ -587,403 +541,553 @@
             }
 
             showShop() {
-                this.stopGame();
+                this.stopGameEngine();
                 document.getElementById('homeScreen').classList.add('hidden');
-                document.getElementById('gameScreen').classList.add('hidden');
-                document.getElementById('resultScreen').classList.add('hidden');
                 document.getElementById('shopScreen').classList.remove('hidden');
-                document.getElementById('shopCoinDisplay').innerText = this.userData.coins;
                 this.renderShop();
             }
 
-            renderShop() {
-                const grid = document.getElementById('avatarShopGrid');
-                grid.innerHTML = '';
-                avatarCatalog.forEach(item => {
-                    const unlocked = this.userData.unlockedAvatars.includes(item.id);
-                    const isActive = this.userData.activeAvatar === item.icon;
-
-                    const card = document.createElement('div');
-                    card.className = `glass-card p-4 rounded-2xl text-center flex flex-col items-center justify-between space-y-2 border-2 ${
-                        isActive ? 'border-amber-500 bg-amber-500/10' : 'border-gray-200'
-                    }`;
-
-                    card.innerHTML = `
-                        <div class="text-4xl floating">${item.icon}</div>
-                        <div>
-                            <div class="font-extrabold text-sm">${item.name}</div>
-                            <div class="text-xs font-bold opacity-75">${unlocked ? 'Bezit' : '🪙 ' + item.price}</div>
-                        </div>
-                        <button onclick="app.buyOrEquipAvatar('${item.id}')" class="w-full py-1.5 px-3 rounded-xl font-extrabold text-xs text-white transition ${
-                            isActive ? 'bg-amber-500 cursor-default' : unlocked ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-emerald-600 hover:bg-emerald-700'
-                        }">
-                            ${isActive ? 'Actief' : unlocked ? 'Kiezen' : 'Kopen'}
-                        </button>
-                    `;
-                    grid.appendChild(card);
-                });
+            toggleSettingsModal(show) {
+                document.getElementById('settingsModal').classList.toggle('hidden', !show);
             }
 
-            buyOrEquipAvatar(id) {
-                const item = avatarCatalog.find(a => a.id === id);
-                if (!item) return;
-
-                if (this.userData.unlockedAvatars.includes(id)) {
-                    this.userData.activeAvatar = item.icon;
-                } else if (this.userData.coins >= item.price) {
-                    this.userData.coins -= item.price;
-                    this.userData.unlockedAvatars.push(id);
-                    this.userData.activeAvatar = item.icon;
-                } else {
-                    alert('Niet genoeg munten!');
-                    return;
-                }
-                this.saveDB();
-                this.updateHUD();
-                this.renderShop();
-            }
-
-            startMode(m) {
-                this.mode = m;
-                this.score = 0;
-                this.hearts = 3;
+            startMode(modeType) {
+                this.mode = modeType;
+                this.questions = [...gameQuestions].sort(() => Math.random() - 0.5);
                 this.qIndex = 0;
-                this.questions = [...gameQuestions].sort(() => 0.5 - Math.random());
+                this.score = 0;
+                this.hearts = (modeType === 'practice') ? 999 : 3;
 
                 document.getElementById('homeScreen').classList.add('hidden');
                 document.getElementById('gameScreen').classList.remove('hidden');
-                document.getElementById('gameModeBadge').innerText = m.toUpperCase();
-                
-                this.setupCanvas();
+                document.getElementById('gameScreen').classList.add('flex');
+
+                const modeBadges = { archer: '🎯 Ninja Shuriken', slasher: '⚔️️ Word Slasher', maze: '🗺️ Ninja Doolhof', practice: '📖 Oefenstudio' };
+                document.getElementById('gameModeBadge').innerText = modeBadges[modeType];
+
+                const canvasContainer = document.getElementById('canvasContainer');
+                const practiceArena = document.getElementById('practiceArena');
+                const controlsOverlay = document.getElementById('controlsOverlay');
+                const dpadControls = document.getElementById('dpadControls');
+                const mazeInteractContainer = document.getElementById('mazeInteractContainer');
+
+                if (modeType === 'practice') {
+                    canvasContainer.classList.add('hidden');
+                    practiceArena.classList.remove('hidden');
+                    controlsOverlay.classList.add('hidden');
+                } else {
+                    canvasContainer.classList.remove('hidden');
+                    practiceArena.classList.add('hidden');
+                    controlsOverlay.classList.remove('hidden');
+
+                    dpadControls.classList.toggle('hidden', modeType !== 'maze');
+                    mazeInteractContainer.classList.toggle('hidden', modeType !== 'maze');
+
+                    this.canvas = document.getElementById('gameCanvas');
+                    this.ctx = this.canvas.getContext('2d');
+                    this.resizeCanvas();
+                }
+
+                this.renderHearts();
                 this.loadQuestion();
             }
 
-            setupCanvas() {
-                this.canvas = document.getElementById('gameCanvas');
-                this.ctx = this.canvas.getContext('2d');
-                
-                const container = document.getElementById('canvasContainer');
-                this.canvas.width = container.clientWidth;
-                this.canvas.height = container.clientHeight;
-
+            renderHearts() {
+                const c = document.getElementById('heartsContainer');
                 if (this.mode === 'practice') {
-                    document.getElementById('canvasContainer').classList.add('hidden');
-                    document.getElementById('practiceArena').classList.remove('hidden');
-                    document.getElementById('controlsOverlay').classList.add('hidden');
-                } else {
-                    document.getElementById('canvasContainer').classList.remove('hidden');
-                    document.getElementById('practiceArena').classList.add('hidden');
-                    
-                    if (this.mode === 'maze') {
-                        document.getElementById('controlsOverlay').classList.remove('hidden');
-                        document.getElementById('mazeInteractContainer').classList.remove('hidden');
-                    } else {
-                        document.getElementById('controlsOverlay').classList.add('hidden');
-                    }
+                    c.innerHTML = '<span class="text-xs font-black text-emerald-600 bg-emerald-100 px-2 py-1 rounded-md">Geen tijdslimiet</span>';
+                    return;
                 }
+                let h = '';
+                for (let i = 0; i < 3; i++) {
+                    h += (i < this.hearts) ? '❤️' : '<span class="opacity-30 grayscale">💔</span>';
+                }
+                c.innerHTML = h;
+            }
+
+            prepareQuestionOptions(q) {
+                // Maak een optie-object met tekst en correctheidsindicator
+                const correctText = q.options[q.correct];
+                let opts = q.options.map((optText, idx) => ({
+                    text: optText,
+                    isCorrect: (idx === q.correct)
+                }));
+
+                // Hussel de antwoorden willekeurig (Fisher-Yates shuffle)
+                for (let i = opts.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [opts[i], opts[j]] = [opts[j], opts[i]];
+                }
+
+                // Garantiecontrole: controleer of het juiste antwoord er altijd tussen staat
+                if (!opts.some(o => o.isCorrect)) {
+                    opts[0] = { text: correctText, isCorrect: true };
+                }
+
+                return opts;
             }
 
             loadQuestion() {
-                document.getElementById('feedbackBox').classList.add('hidden');
-                this.updateHeartsUI();
-                document.getElementById('currentScore').innerText = this.score;
-
                 if (this.qIndex >= this.questions.length || this.hearts <= 0) {
-                    return this.endGame();
+                    this.finishGame();
+                    return;
                 }
 
                 const q = this.questions[this.qIndex];
+                // Genereer willekeurig geschudde opties voor deze vraag
+                this.currentOpts = this.prepareQuestionOptions(q);
+
                 document.getElementById('questionTag').innerText = q.tag;
-                document.getElementById('questionText').innerText = q.q;
+                document.getElementById('questionText').innerHTML = q.q.replace(/\*\*(.*?)\*\*/g, '<span class="text-amber-500 font-extrabold underline">$1</span>');
+                document.getElementById('feedbackBox').classList.add('hidden');
+                document.getElementById('currentScore').innerText = this.score;
 
-                this.currentOpts = q.options.map((opt, i) => ({ text: opt, isCorrect: i === q.correct }))
-                                            .sort(() => 0.5 - Math.random());
-
-                this.stopGameLoop();
-
-                if (this.mode === 'archer') this.initArcherMode();
-                else if (this.mode === 'slasher') this.initSlasherMode();
-                else if (this.mode === 'maze') this.initMazeMode();
-                else if (this.mode === 'practice') this.renderPracticeMode();
-            }
-
-            updateHeartsUI() {
-                const container = document.getElementById('heartsContainer');
-                container.innerHTML = '';
-                for (let i = 0; i < 3; i++) {
-                    const span = document.createElement('span');
-                    span.className = 'text-lg sm:text-xl';
-                    span.innerText = i < this.hearts ? '❤️' : '🖤';
-                    container.appendChild(span);
+                if (this.mode === 'practice') {
+                    this.renderPracticeOptions(q);
+                } else {
+                    this.initCanvasEngine(q);
                 }
             }
 
-            // --- ARCHER MODE ---
-            initArcherMode() {
+            renderPracticeOptions(q) {
+                const container = document.getElementById('practiceArena');
+                container.innerHTML = '';
+                this.currentOpts.forEach((optObj) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'w-full px-5 py-3.5 anonymous-option text-left font-bold text-sm sm:text-base flex items-center gap-3 btn-hover';
+                    btn.innerHTML = `<span class="text-xl opacity-60">⚪</span> <span>${optObj.text}</span>`;
+                    
+                    btn.onclick = () => {
+                        Array.from(container.children).forEach(b => b.disabled = true);
+                        const isCorrect = optObj.isCorrect;
+                        if (isCorrect) {
+                            btn.className = 'w-full px-5 py-3.5 bg-emerald-600 text-white font-bold rounded-xl text-left border-2 border-emerald-400 flex items-center gap-3';
+                            btn.innerHTML = `<span class="text-xl">✅</span> <span>${optObj.text}</span>`;
+                            this.playSfx(1046, 0.2);
+                        } else {
+                            btn.className = 'w-full px-5 py-3.5 bg-rose-600 text-white font-bold rounded-xl text-left border-2 border-rose-400 flex items-center gap-3';
+                            btn.innerHTML = `<span class="text-xl">❌</span> <span class="line-through">${optObj.text}</span>`;
+                            this.playSfx(150, 0.3);
+                        }
+                        setTimeout(() => this.showFeedback(isCorrect, q.exp), 600);
+                    };
+                    container.appendChild(btn);
+                });
+            }
+
+            resizeCanvas() {
+                if (!this.canvas) return;
+                const rect = this.canvas.parentElement.getBoundingClientRect();
+                this.canvas.width = rect.width;
+                this.canvas.height = rect.height;
+            }
+
+            initCanvasEngine(q) {
+                this.stopGameEngine();
+                this.isPlaying = true;
+
+                if (this.mode === 'archer') {
+                    // NINJA SHURIKEN DOELSCHIETEN
+                    const h = this.canvas.height;
+                    const count = this.currentOpts.length;
+                    const spacing = (h - 60) / count;
+
+                    this.archerState = {
+                        shuriken: null,
+                        targets: this.currentOpts.map((optObj, idx) => ({
+                            x: this.canvas.width - 130,
+                            y: 40 + idx * spacing + spacing / 2,
+                            optText: optObj.text,
+                            isCorrect: optObj.isCorrect
+                        }))
+                    };
+
+                    this.canvas.onmousedown = (e) => this.handleArcherClick(e);
+                    this.canvas.ontouchstart = (e) => { e.preventDefault(); this.handleArcherClick(e.touches[0]); };
+
+                } else if (this.mode === 'slasher') {
+                    // WORD SLASHER MET 3 SECONDE COUNTDOWN
+                    const w = this.canvas.width;
+                    const h = this.canvas.height;
+                    const count = this.currentOpts.length;
+
+                    this.slasherState = {
+                        countdown: 3.0, // 3 seconden leestijd vooraf
+                        items: this.currentOpts.map((optObj, idx) => ({
+                            x: (w / (count + 1)) * (idx + 1),
+                            y: h + 30,
+                            vx: (Math.random() - 0.5) * 30,
+                            vy: -(190 + Math.random() * 40),
+                            optText: optObj.text,
+                            isCorrect: optObj.isCorrect,
+                            sliced: false
+                        }))
+                    };
+
+                    this.canvas.onmousedown = (e) => this.handleSlasherClick(e);
+                    this.canvas.ontouchstart = (e) => { e.preventDefault(); this.handleSlasherClick(e.touches[0]); };
+
+                } else if (this.mode === 'maze') {
+                    // NINJA DOOLHOF
+                    this.mazeState = {
+                        px: 1, py: 1,
+                        grid: [
+                            [1,1,1,1,1,1,1,1,1],
+                            [1,0,0,0,1,0,0,0,1],
+                            [1,0,1,0,1,0,1,0,1],
+                            [1,0,1,0,0,0,1,0,1],
+                            [1,0,1,1,1,0,1,0,1],
+                            [1,0,0,0,0,0,0,0,1],
+                            [1,1,1,1,1,1,1,1,1]
+                        ],
+                        items: this.currentOpts.map((optObj, idx) => {
+                            const coords = [[1,5], [7,1], [7,5], [3,3]];
+                            return { x: coords[idx][0], y: coords[idx][1], optText: optObj.text, isCorrect: optObj.isCorrect };
+                        }),
+                        ghosts: [ { x: 5, y: 1, dir: 1 }, { x: 3, y: 5, dir: -1 } ]
+                    };
+                }
+
+                this.lastTime = performance.now();
+                this.animId = requestAnimationFrame(this.gameLoop.bind(this));
+            }
+
+            stopGameEngine() {
+                this.isPlaying = false;
+                if (this.animId) cancelAnimationFrame(this.animId);
+                if (this.canvas) {
+                    this.canvas.onmousedown = null;
+                    this.canvas.ontouchstart = null;
+                }
+            }
+
+            gameLoop(timestamp) {
+                if (!this.isPlaying) return;
+                const dt = Math.min((timestamp - this.lastTime) / 1000, 0.1);
+                this.lastTime = timestamp;
+
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+                if (this.mode === 'archer') this.updateArcher(dt);
+                else if (this.mode === 'slasher') this.updateSlasher(dt);
+                else if (this.mode === 'maze') this.updateMaze(dt);
+
+                this.animId = requestAnimationFrame(this.gameLoop.bind(this));
+            }
+
+            // --- GAME 1: NINJA SHURIKEN DOELSCHIETEN LOGICA ---
+            updateArcher(dt) {
+                const ctx = this.ctx;
                 const w = this.canvas.width;
                 const h = this.canvas.height;
-                const targetW = Math.min(130, w / 4 - 10);
-                
-                this.archerState = {
-                    targets: this.currentOpts.map((opt, i) => ({
-                        x: 10 + i * (targetW + 8),
-                        y: 40,
-                        w: targetW,
-                        h: 50,
-                        opt: opt
-                    })),
-                    shuriken: { x: w / 2, y: h - 50, vx: 0, vy: 0, active: false }
-                };
 
-                this.canvas.onclick = (e) => {
-                    if (this.archerState.shuriken.active) return;
-                    const rect = this.canvas.getBoundingClientRect();
-                    const clickX = e.clientX - rect.left;
-                    const clickY = e.clientY - rect.top;
+                // Achtergrond
+                ctx.fillStyle = '#1e293b'; ctx.fillRect(0, 0, w, h);
 
-                    const dx = clickX - this.archerState.shuriken.x;
-                    const dy = clickY - this.archerState.shuriken.y;
-                    const angle = Math.atan2(dy, dx);
+                // Teken Ninja links
+                ctx.font = '45px Outfit';
+                ctx.textAlign = 'center';
+                ctx.fillText(this.userData.activeAvatar, 50, h / 2 + 15);
 
-                    this.archerState.shuriken.vx = Math.cos(angle) * 12;
-                    this.archerState.shuriken.vy = Math.sin(angle) * 12;
-                    this.archerState.shuriken.active = true;
-                };
+                const st = this.archerState;
 
-                this.isPlaying = true;
-                this.runArcherLoop();
-            }
+                // Teken Doelen (Schatkisten/Schietborden)
+                st.targets.forEach((tgt, idx) => {
+                    ctx.fillStyle = '#334155';
+                    ctx.strokeStyle = '#f59e0b';
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+                    ctx.roundRect(tgt.x - 60, tgt.y - 25, 120, 50, 10);
+                    ctx.fill();
+                    ctx.stroke();
 
-            runArcherLoop() {
-                if (!this.isPlaying) return;
-                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-                // Target Doelen
-                this.archerState.targets.forEach(t => {
-                    this.ctx.fillStyle = '#312e81';
-                    this.ctx.beginPath();
-                    this.ctx.roundRect(t.x, t.y, t.w, t.h, 12);
-                    this.ctx.fill();
-                    this.ctx.strokeStyle = '#6366f1';
-                    this.ctx.lineWidth = 2;
-                    this.ctx.stroke();
-
-                    this.ctx.fillStyle = '#ffffff';
-                    this.ctx.font = 'bold 12px Outfit';
-                    this.ctx.textAlign = 'center';
-                    this.ctx.fillText(t.opt.text, t.x + t.w / 2, t.y + 30);
+                    // Bord tekst
+                    ctx.fillStyle = '#ffffff';
+                    ctx.font = 'bold 14px Outfit';
+                    ctx.fillText(tgt.optText, tgt.x, tgt.y + 5);
                 });
 
-                // Shuriken Projectiel
-                const s = this.archerState.shuriken;
-                if (s.active) {
-                    s.x += s.vx;
-                    s.y += s.vy;
+                // Vliegende Shuriken Animation
+                if (st.shuriken) {
+                    const sh = st.shuriken;
+                    sh.x += sh.vx * dt;
+                    sh.y += sh.vy * dt;
+                    sh.rot += 15 * dt;
 
-                    this.ctx.font = '24px Outfit';
-                    this.ctx.textAlign = 'center';
-                    this.ctx.fillText('🥷', s.x, s.y);
+                    ctx.save();
+                    ctx.translate(sh.x, sh.y);
+                    ctx.rotate(sh.rot);
+                    ctx.font = '28px Outfit';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('🥷', 0, 8);
+                    ctx.restore();
 
-                    // Botsing Detectie
-                    this.archerState.targets.forEach(t => {
-                        if (s.x > t.x && s.x < t.x + t.w && s.y > t.y && s.y < t.y + t.h) {
-                            s.active = false;
-                            this.handleAnswer(t.opt.isCorrect);
+                    // Raakt doel?
+                    const dist = Math.hypot(sh.x - sh.targetObj.x, sh.y - sh.targetObj.y);
+                    if (dist < 35) {
+                        const tgt = sh.targetObj;
+                        st.shuriken = null;
+                        this.stopGameEngine();
+
+                        if (tgt.isCorrect) {
+                            this.playSfx(1046, 0.2);
+                            this.score += 100;
+                            this.showFeedback(true, this.questions[this.qIndex].exp);
+                        } else {
+                            this.playSfx(150, 0.3);
+                            this.hearts--;
+                            this.renderHearts();
+                            this.showFeedback(false, `Mismaakt! Verkeerd doel geraakt. ${this.questions[this.qIndex].exp}`);
                         }
-                    });
-
-                    // Buiten scherm reset
-                    if (s.y < 0 || s.x < 0 || s.x > this.canvas.width || s.y > this.canvas.height) {
-                        s.x = this.canvas.width / 2;
-                        s.y = this.canvas.height - 50;
-                        s.active = false;
                     }
-                } else {
-                    this.ctx.font = '28px Outfit';
-                    this.ctx.textAlign = 'center';
-                    this.ctx.fillText('🎯', s.x, s.y);
+                }
+            }
+
+            handleArcherClick(e) {
+                if (this.mode !== 'archer' || !this.isPlaying || this.archerState.shuriken) return;
+                const rect = this.canvas.getBoundingClientRect();
+                const clickX = e.clientX - rect.left;
+                const clickY = e.clientY - rect.top;
+
+                // Klik je op een doel?
+                this.archerState.targets.forEach(tgt => {
+                    if (clickX > tgt.x - 70 && clickX < tgt.x + 70 && clickY > tgt.y - 30 && clickY < tgt.y + 30) {
+                        const startX = 60;
+                        const startY = this.canvas.height / 2;
+                        const dx = tgt.x - startX;
+                        const dy = tgt.y - startY;
+                        const angle = Math.atan2(dy, dx);
+                        const speed = 700;
+
+                        this.archerState.shuriken = {
+                            x: startX, y: startY,
+                            vx: Math.cos(angle) * speed,
+                            vy: Math.sin(angle) * speed,
+                            rot: 0,
+                            targetObj: tgt
+                        };
+                        this.playSfx(600, 0.08);
+                    }
+                });
+            }
+
+            // --- GAME 2: WORD SLASHER LOGICA (TRAGER & SLOWER) ---
+            updateSlasher(dt) {
+                const ctx = this.ctx;
+                const w = this.canvas.width;
+                const h = this.canvas.height;
+
+                ctx.fillStyle = '#0f172a'; ctx.fillRect(0, 0, w, h);
+
+                const st = this.slasherState;
+
+                // 3 Seconden Countdown scherm
+                if (st.countdown > 0) {
+                    st.countdown -= dt;
+                    const countNum = Math.ceil(st.countdown);
+
+                    ctx.fillStyle = '#f59e0b';
+                    ctx.font = '900 64px Outfit';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(countNum > 0 ? countNum : 'KLAAR!', w / 2, h / 2 - 10);
+
+                    ctx.fillStyle = '#94a3b8';
+                    ctx.font = 'bold 16px Outfit';
+                    ctx.fillText('📖 Lees de vraag hierboven! Woorden vliegen zo omhoog...', w / 2, h / 2 + 40);
+                    return;
                 }
 
-                this.animId = requestAnimationFrame(() => this.runArcherLoop());
+                const gravity = 90;
+                let activeCount = 0;
+
+                st.items.forEach(it => {
+                    if (it.sliced) return;
+
+                    it.x += it.vx * dt;
+                    it.y += it.vy * dt;
+                    it.vy += gravity * dt;
+
+                    if (it.y < h + 60) activeCount++;
+
+                    // Teken Vliegend Woord
+                    ctx.save();
+                    ctx.translate(it.x, it.y);
+                    ctx.fillStyle = '#1e293b';
+                    ctx.strokeStyle = '#64748b';
+                    ctx.lineWidth = 3;
+                    ctx.beginPath(); ctx.roundRect(-60, -22, 120, 44, 12); ctx.fill(); ctx.stroke();
+
+                    ctx.fillStyle = '#ffffff';
+                    ctx.font = 'bold 13px Outfit';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(it.optText, 0, 4);
+                    ctx.restore();
+                });
+
+                if (activeCount === 0 && this.isPlaying) {
+                    this.stopGameEngine();
+                    this.hearts--;
+                    this.renderHearts();
+                    this.playSfx(150, 0.3);
+                    this.showFeedback(false, `Gemist! Het juiste antwoord vloog voorbij. ${this.questions[this.qIndex].exp}`);
+                }
             }
 
-            // --- SLASHER MODE ---
-            initSlasherMode() {
-                const w = this.canvas.width;
-                this.slasherState = {
-                    items: this.currentOpts.map((opt, i) => ({
-                        x: 30 + i * (w / 4),
-                        y: -40 - (i * 60),
-                        speed: 1.2,
-                        opt: opt
-                    }))
-                };
-
-                this.canvas.onclick = (e) => {
-                    const rect = this.canvas.getBoundingClientRect();
-                    const cx = e.clientX - rect.left;
-                    const cy = e.clientY - rect.top;
-
-                    this.slasherState.items.forEach(it => {
-                        if (Math.abs(cx - it.x) < 40 && Math.abs(cy - it.y) < 30) {
-                            this.handleAnswer(it.opt.isCorrect);
-                        }
-                    });
-                };
-
-                this.isPlaying = true;
-                this.runSlasherLoop();
-            }
-
-            runSlasherLoop() {
-                if (!this.isPlaying) return;
-                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            handleSlasherClick(e) {
+                if (this.mode !== 'slasher' || !this.isPlaying) return;
+                const rect = this.canvas.getBoundingClientRect();
+                const clickX = e.clientX - rect.left;
+                const clickY = e.clientY - rect.top;
 
                 this.slasherState.items.forEach(it => {
-                    it.y += it.speed;
+                    if (it.sliced) return;
+                    const dist = Math.hypot(it.x - clickX, it.y - clickY);
+                    if (dist < 50) {
+                        it.sliced = true;
+                        this.stopGameEngine();
 
-                    this.ctx.fillStyle = '#ea580c';
-                    this.ctx.beginPath();
-                    this.ctx.roundRect(it.x - 40, it.y - 20, 80, 40, 10);
-                    this.ctx.fill();
+                        if (it.isCorrect) {
+                            this.playSfx(1046, 0.2);
+                            this.score += 100;
+                            this.showFeedback(true, this.questions[this.qIndex].exp);
+                        } else {
+                            this.playSfx(150, 0.3);
+                            this.hearts--;
+                            this.renderHearts();
+                            this.showFeedback(false, `Oeps, verkeerde hak-aanval! ${this.questions[this.qIndex].exp}`);
+                        }
+                    }
+                });
+            }
 
-                    this.ctx.fillStyle = '#ffffff';
-                    this.ctx.font = 'bold 12px Outfit';
-                    this.ctx.textAlign = 'center';
-                    this.ctx.fillText(it.opt.text, it.x, it.y + 5);
+            // --- GAME 3: DOOLHOF LOGICA (MET HANDMATIGE PAK-OP) ---
+            updateMaze(dt) {
+                const ctx = this.ctx;
+                const w = this.canvas.width;
+                const h = this.canvas.height;
 
-                    if (it.y > this.canvas.height + 30) {
-                        it.y = -40;
+                ctx.fillStyle = '#090d16'; ctx.fillRect(0, 0, w, h);
+
+                const st = this.mazeState;
+                const cols = st.grid[0].length;
+                const rows = st.grid.length;
+                const cellW = w / cols;
+                const cellH = h / rows;
+
+                // Grid Muren
+                for (let r = 0; r < rows; r++) {
+                    for (let c = 0; c < cols; c++) {
+                        if (st.grid[r][c] === 1) {
+                            ctx.fillStyle = '#1e293b';
+                            ctx.fillRect(c * cellW, r * cellH, cellW, cellH);
+                            ctx.strokeStyle = '#334155';
+                            ctx.strokeRect(c * cellW, r * cellH, cellW, cellH);
+                        }
+                    }
+                }
+
+                // Item schatkisten
+                let standingOnItem = false;
+                st.items.forEach(it => {
+                    const isNear = (st.px === it.x && st.py === it.y);
+                    if (isNear) standingOnItem = true;
+
+                    ctx.fillStyle = isNear ? '#f59e0b' : '#334155';
+                    ctx.strokeStyle = isNear ? '#ffffff' : '#475569';
+                    ctx.lineWidth = 2;
+                    ctx.fillRect(it.x * cellW + 4, it.y * cellH + 4, cellW - 8, cellH - 8);
+                    ctx.strokeRect(it.x * cellW + 4, it.y * cellH + 4, cellW - 8, cellH - 8);
+
+                    ctx.fillStyle = '#ffffff';
+                    ctx.font = 'bold 11px Outfit';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(it.optText, (it.x + 0.5) * cellW, (it.y + 0.55) * cellH);
+                });
+
+                // Tip tonen als je op een schat staat
+                if (standingOnItem) {
+                    ctx.fillStyle = '#f59e0b';
+                    ctx.font = 'bold 14px Outfit';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('Druk op [PAK OP] om te antwoorden!', w / 2, 25);
+                }
+
+                // Spoken (Obstakels)
+                st.ghosts.forEach(g => {
+                    g.x += g.dir * dt * 1.3;
+                    if (g.x > 7 || g.x < 1) g.dir *= -1;
+
+                    ctx.font = '22px Outfit';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('👻', (g.x + 0.5) * cellW, (g.y + 0.65) * cellH);
+
+                    if (Math.hypot(g.x - st.px, g.y - st.py) < 0.6) {
+                        this.stopGameEngine();
+                        this.playSfx(150, 0.3);
+                        this.hearts--;
+                        this.renderHearts();
+                        this.showFeedback(false, `Geraakt door een spook! Blijf uit hun buurt.`);
                     }
                 });
 
-                this.animId = requestAnimationFrame(() => this.runSlasherLoop());
-            }
-
-            // --- MAZE MODE ---
-            initMazeMode() {
-                this.mazeState = {
-                    px: 1, py: 1,
-                    grid: [
-                        [1,1,1,1,1,1,1],
-                        [1,0,0,0,0,0,1],
-                        [1,0,1,0,1,0,1],
-                        [1,0,0,0,0,0,1],
-                        [1,1,1,1,1,1,1]
-                    ],
-                    items: [
-                        { x: 1, y: 3, opt: this.currentOpts[0] },
-                        { x: 5, y: 1, opt: this.currentOpts[1] },
-                        { x: 5, y: 3, opt: this.currentOpts[2] },
-                        { x: 3, y: 3, opt: this.currentOpts[3] }
-                    ].filter(i => i.opt)
-                };
-
-                this.isPlaying = true;
-                this.runMazeLoop();
-            }
-
-            handleDirInput(dir) {
-                if (this.mode !== 'maze' || !this.isPlaying) return;
-                let { px, py, grid } = this.mazeState;
-                if (dir === 'up' && grid[py - 1][px] === 0) py--;
-                if (dir === 'down' && grid[py + 1][px] === 0) py++;
-                if (dir === 'left' && grid[py][px - 1] === 0) px--;
-                if (dir === 'right' && grid[py][px + 1] === 0) px++;
-                this.mazeState.px = px;
-                this.mazeState.py = py;
+                // Ninja Speler
+                ctx.font = '26px Outfit';
+                ctx.textAlign = 'center';
+                ctx.fillText(this.userData.activeAvatar, (st.px + 0.5) * cellW, (st.py + 0.65) * cellH);
             }
 
             mazePickUp() {
                 if (this.mode !== 'maze' || !this.isPlaying) return;
-                const { px, py, items } = this.mazeState;
-                const item = items.find(i => i.x === px && i.y === py);
-                if (item) {
-                    this.handleAnswer(item.opt.isCorrect);
-                }
-            }
+                const st = this.mazeState;
+                const foundItem = st.items.find(it => it.x === st.px && it.y === st.py);
 
-            runMazeLoop() {
-                if (!this.isPlaying) return;
-                const { px, py, grid, items } = this.mazeState;
-                const cellW = this.canvas.width / 7;
-                const cellH = this.canvas.height / 5;
-
-                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-                for (let r = 0; r < 5; r++) {
-                    for (let c = 0; c < 7; c++) {
-                        if (grid[r][c] === 1) {
-                            this.ctx.fillStyle = '#334155';
-                            this.ctx.fillRect(c * cellW, r * cellH, cellW, cellH);
-                        }
+                if (foundItem) {
+                    this.stopGameEngine();
+                    if (foundItem.isCorrect) {
+                        this.playSfx(1046, 0.2);
+                        this.score += 100;
+                        this.showFeedback(true, this.questions[this.qIndex].exp);
+                    } else {
+                        this.playSfx(150, 0.3);
+                        this.hearts--;
+                        this.renderHearts();
+                        this.showFeedback(false, `Verkeerde schat gekozen! ${this.questions[this.qIndex].exp}`);
                     }
                 }
-
-                items.forEach(it => {
-                    this.ctx.fillStyle = '#0284c7';
-                    this.ctx.beginPath();
-                    this.ctx.roundRect(it.x * cellW + 5, it.y * cellH + 5, cellW - 10, cellH - 10, 8);
-                    this.ctx.fill();
-
-                    this.ctx.fillStyle = '#ffffff';
-                    this.ctx.font = 'bold 11px Outfit';
-                    this.ctx.textAlign = 'center';
-                    this.ctx.fillText(it.opt.text, it.x * cellW + cellW / 2, it.y * cellH + cellH / 2 + 4);
-                });
-
-                // Speler Ninja
-                this.ctx.font = '24px Outfit';
-                this.ctx.textAlign = 'center';
-                this.ctx.fillText(this.userData.activeAvatar || '🥷', px * cellW + cellW / 2, py * cellH + cellH / 2 + 8);
-
-                this.animId = requestAnimationFrame(() => this.runMazeLoop());
             }
 
-            // --- PRACTICE MODE ---
-            renderPracticeMode() {
-                const arena = document.getElementById('practiceArena');
-                arena.innerHTML = '';
-                this.currentOpts.forEach(opt => {
-                    const btn = document.createElement('button');
-                    btn.className = 'w-full py-3.5 px-4 bg-indigo-600/90 hover:bg-indigo-700 text-white font-extrabold rounded-2xl shadow-md transition btn-hover text-sm';
-                    btn.innerText = opt.text;
-                    btn.onclick = () => this.handleAnswer(opt.isCorrect);
-                    arena.appendChild(btn);
-                });
+            handleDirInput(dir) {
+                if (this.mode !== 'maze' || !this.isPlaying) return;
+                const st = this.mazeState;
+                let nx = st.px, ny = st.py;
+
+                if (dir === 'up') ny--;
+                if (dir === 'down') ny++;
+                if (dir === 'left') nx--;
+                if (dir === 'right') nx++;
+
+                if (st.grid[ny] && st.grid[ny][nx] === 0) {
+                    st.px = nx; st.py = ny;
+                }
             }
 
             setupKeyboardListeners() {
                 window.onkeydown = (e) => {
-                    if (this.mode === 'maze') {
-                        if (e.key === 'ArrowUp' || e.key === 'w') this.handleDirInput('up');
-                        if (e.key === 'ArrowDown' || e.key === 's') this.handleDirInput('down');
-                        if (e.key === 'ArrowLeft' || e.key === 'a') this.handleDirInput('left');
-                        if (e.key === 'ArrowRight' || e.key === 'd') this.handleDirInput('right');
-                        if (e.key === ' ' || e.key === 'e') this.mazePickUp();
-                    }
+                    if (e.key === 'ArrowUp' || e.key === 'w') this.handleDirInput('up');
+                    if (e.key === 'ArrowDown' || e.key === 's') this.handleDirInput('down');
+                    if (e.key === 'ArrowLeft' || e.key === 'a') this.handleDirInput('left');
+                    if (e.key === 'ArrowRight' || e.key === 'd') this.handleDirInput('right');
+                    if (e.key === 'e' || e.key === ' ') this.mazePickUp();
                 };
             }
 
-            handleAnswer(isCorrect) {
-                this.stopGameLoop();
-                const q = this.questions[this.qIndex];
-
-                if (isCorrect) {
-                    this.score += 10;
-                    document.getElementById('feedbackIcon').innerText = '🎉';
-                    document.getElementById('feedbackTitle').innerText = 'Goed Gedaan!';
-                    document.getElementById('feedbackTitle').className = 'font-black text-2xl sm:text-3xl mb-1 text-emerald-600';
-                } else {
-                    this.hearts--;
-                    document.getElementById('feedbackIcon').innerText = '💥';
-                    document.getElementById('feedbackTitle').innerText = 'Helaas Fout!';
-                    document.getElementById('feedbackTitle').className = 'font-black text-2xl sm:text-3xl mb-1 text-rose-600';
-                }
-
-                document.getElementById('feedbackText').innerText = q.exp;
-                document.getElementById('feedbackBox').classList.remove('hidden');
-                this.updateHeartsUI();
+            showFeedback(isCorrect, text) {
+                const box = document.getElementById('feedbackBox');
+                document.getElementById('feedbackIcon').innerText = isCorrect ? '🎉' : '💀';
+                document.getElementById('feedbackTitle').innerText = isCorrect ? 'Goed gedaan!' : 'Helaas!';
+                document.getElementById('feedbackTitle').className = `font-black text-2xl sm:text-3xl mb-1 ${isCorrect ? 'text-emerald-600' : 'text-rose-600'}`;
+                document.getElementById('feedbackText').innerText = text;
+                box.classList.remove('hidden');
             }
 
             nextQuestion() {
@@ -991,34 +1095,75 @@
                 this.loadQuestion();
             }
 
-            stopGameLoop() {
-                this.isPlaying = false;
-                if (this.animId) cancelAnimationFrame(this.animId);
-            }
-
-            stopGame() {
-                this.stopGameLoop();
-                if (this.canvas) {
-                    this.canvas.onclick = null;
-                }
-            }
-
-            endGame() {
-                this.stopGame();
+            finishGame() {
+                this.stopGameEngine();
                 document.getElementById('gameScreen').classList.add('hidden');
                 document.getElementById('resultScreen').classList.remove('hidden');
 
-                const earnedCoins = Math.floor(this.score / 2);
-                this.userData.coins += earnedCoins;
-
-                if (this.score > (this.userData.highScore || 0)) {
+                const coinsEarned = Math.floor(this.score * 0.15);
+                this.userData.coins += coinsEarned;
+                if (this.score > this.userData.highScore && this.mode !== 'practice') {
                     this.userData.highScore = this.score;
                 }
 
                 this.saveDB();
-
                 document.getElementById('resScore').innerText = this.score;
-                document.getElementById('resCoins').innerText = `+${earnedCoins} 🪙`;
+                document.getElementById('resCoins').innerText = `+${coinsEarned} 🪙`;
+                this.updateHUD();
+            }
+
+            renderShop() {
+                const grid = document.getElementById('avatarShopGrid');
+                grid.innerHTML = avatarCatalog.map(av => {
+                    const isUnlocked = this.userData.unlockedAvatars.includes(av.id);
+                    const isSelected = this.userData.activeAvatar === av.icon;
+                    return `
+                        <div class="glass-card p-4 rounded-2xl flex flex-col items-center space-y-2 border-2 ${isSelected ? 'border-amber-400 bg-amber-400/10' : 'border-transparent'}">
+                            <span class="text-4xl">${av.icon}</span>
+                            <span class="font-bold text-xs">${av.name}</span>
+                            ${isUnlocked ? `
+                                <button onclick="app.selectAvatar('${av.icon}')" class="px-2 py-1 bg-emerald-500 text-white rounded-lg text-xs w-full">
+                                    ${isSelected ? 'Actief' : 'Kiezen'}
+                                </button>
+                            ` : `
+                                <button onclick="app.buyAvatar('${av.id}', ${av.price}, '${av.icon}')" class="px-2 py-1 bg-amber-500 text-white rounded-lg text-xs w-full">
+                                    ${av.price} 🪙
+                                </button>
+                            `}
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            buyAvatar(id, price, icon) {
+                if (this.userData.coins >= price) {
+                    this.userData.coins -= price;
+                    this.userData.unlockedAvatars.push(id);
+                    this.selectAvatar(icon);
+                } else alert('Niet genoeg munten!');
+            }
+
+            selectAvatar(icon) {
+                this.userData.activeAvatar = icon;
+                this.saveDB();
+                this.updateHUD();
+                this.renderShop();
+            }
+
+            playSfx(freq, duration = 0.15) {
+                try {
+                    if (!this.audioCtx) this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                    const osc = this.audioCtx.createOscillator();
+                    const gain = this.audioCtx.createGain();
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(freq, this.audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.05, this.audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, this.audioCtx.currentTime + duration);
+                    osc.connect(gain);
+                    gain.connect(this.audioCtx.destination);
+                    osc.start();
+                    osc.stop(this.audioCtx.currentTime + duration);
+                } catch(e){}
             }
         }
 
